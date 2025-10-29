@@ -20,8 +20,14 @@ public class LottoController {
 
 
     private int inputPurchaseAmount() {
-        String input = inputView.readPurchaseAmount();
-        return InputValidator.validatePurchaseAmount(input);
+        while (true) {
+            try {
+                String input = inputView.readPurchaseAmount();
+                return InputValidator.validatePurchaseAmount(input);
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 
 
