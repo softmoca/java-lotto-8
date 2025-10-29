@@ -40,6 +40,8 @@ public class LottoController {
     private List<Lotto> purchaseLottos(int purchaseAmount) {
         List<Lotto> lottos = lottoShop.buyLottos(purchaseAmount);
 
+        int count = lottos.size();
+        outputView.printPurchaseCount(count);
         return lottos;
     }
 

@@ -11,5 +11,10 @@ public class OutputView {
         System.out.println(ERROR_PREFIX + message);
     }
 
+    public void printPurchaseCount(int count) {
+        System.out.println();
+        System.out.println(count + "개를 구매했습니다.");
+    }
+
 
 }
