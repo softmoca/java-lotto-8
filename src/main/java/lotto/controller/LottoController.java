@@ -2,6 +2,7 @@ package lotto.controller;
 
 import java.util.List;
 import lotto.Lotto;
+import lotto.domain.RandomLottoNumberGenerator;
 import lotto.service.LottoShop;
 import lotto.util.InputValidator;
 import lotto.view.InputView;
@@ -15,7 +16,7 @@ public class LottoController {
     public LottoController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
-        this.lottoShop = new LottoShop();
+        this.lottoShop = new LottoShop(new RandomLottoNumberGenerator());
     }
 
     public void run() {
