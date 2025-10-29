@@ -42,6 +42,7 @@ public class LottoController {
 
         int count = lottos.size();
         outputView.printPurchaseCount(count);
+        outputView.printLottos(lottos);
         return lottos;
     }
 

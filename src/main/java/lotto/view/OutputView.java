@@ -1,5 +1,9 @@
 package lotto.view;
 
+import java.util.ArrayList;
+import java.util.List;
+import lotto.Lotto;
+
 public class OutputView {
     private static final String ERROR_PREFIX = "[ERROR] ";
 
@@ -14,6 +18,17 @@ public class OutputView {
     public void printPurchaseCount(int count) {
         System.out.println();
         System.out.println(count + "개를 구매했습니다.");
+    }
+
+    public void printLottos(List<Lotto> lottos) {
+        for (Lotto lotto : lottos) {
+            printLotto(lotto);
+        }
+    }
+
+    private void printLotto(Lotto lotto) {
+        List<Integer> numbers = new ArrayList<>(lotto.getNumbers());
+        System.out.println(numbers);
     }
 
 
