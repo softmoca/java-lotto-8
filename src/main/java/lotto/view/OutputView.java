@@ -1,7 +1,9 @@
 package lotto.view;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import lotto.Lotto;
 import lotto.domain.Rank;
 import lotto.domain.WinningStatistics;
@@ -50,8 +52,12 @@ public class OutputView {
 
     private void printRankStatistics(Rank rank, WinningStatistics statistics) {
         int count = statistics.getCountByRank(rank);
-        int prizeAmount = rank.getPrizeAmount();
+        String prizeAmount = formatPrizeAmount(rank.getPrizeAmount());
         System.out.println(rank.getDescription() + " (" + prizeAmount + "원) - " + count + "개");
+    }
+
+    private String formatPrizeAmount(int amount) {
+        return NumberFormat.getNumberInstance(Locale.US).format(amount);
     }
 
     private void printLotto(Lotto lotto) {
