@@ -30,4 +30,21 @@ public class WinningStatistics {
         return statistics.getOrDefault(rank, 0);
     }
 
+    public long calculateTotalPrize() {
+        long totalPrize = 0;
+
+        for (Rank rank : statistics.keySet()) {
+            int count = statistics.get(rank);
+            totalPrize += (long) rank.getPrizeAmount() * count;
+        }
+
+        return totalPrize;
+    }
+
+    public double calculateProfitRate(int purchaseAmount) {
+        long totalPrize = calculateTotalPrize();
+        double profitRate = (double) totalPrize / purchaseAmount * 100;
+        return Math.round(profitRate * 10) / 10.0;
+    }
+
 }

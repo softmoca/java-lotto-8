@@ -85,6 +85,7 @@ public class LottoController {
         WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
         outputView.printStatisticsHeader();
         outputView.printStatistics(statistics);
+        statistics.calculateProfitRate(purchaseAmount);
 
     }
 
