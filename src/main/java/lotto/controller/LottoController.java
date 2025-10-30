@@ -27,7 +27,8 @@ public class LottoController {
     public void run() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
-        WinningNumbers winningNumbers = inputWinningNumbers();
+        WinningNumbers winningNumbers = inputWinningNumbersList();
+
         checkAndPrintResult(lottos, winningNumbers, 1000);// TODO
 
     }
@@ -51,16 +52,13 @@ public class LottoController {
         return lottos;
     }
 
-    private WinningNumbers inputWinningNumbers() {
-        List<String> numbers = inputWinningNumbersList();
-        int bonusNumber = inputBonusNumber();
-        return new WinningNumbers(numbers, bonusNumber);
-    }
 
-    private List<String> inputWinningNumbersList() {
+    private WinningNumbers inputWinningNumbersList() {
         while (true) {
             try {
-                return inputView.readWinningNumbers();
+                List<String> temp = inputView.readWinningNumbers();
+
+                return new WinningNumbers(temp);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }

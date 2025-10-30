@@ -7,14 +7,11 @@ import lotto.util.InputParser;
 public class WinningNumbers {
 
     private final Lotto winningLotto;
-    private final int bonusNumber;
 
 
-    public WinningNumbers(List<String> numberStrings, int bonusNumber) {
+    public WinningNumbers(List<String> numberStrings) {
         List<Integer> numbers = convertToIntegers(numberStrings);
         this.winningLotto = new Lotto(numbers);
-        this.bonusNumber = bonusNumber;
-        validateBonusNumber(numbers, bonusNumber);
     }
 
     private List<Integer> convertToIntegers(List<String> numberStrings) {
@@ -23,16 +20,6 @@ public class WinningNumbers {
                 .toList();
     }
 
-
-    private void validateBonusNumber(List<Integer> numbers, int bonusNumber) {
-        if (numbers.contains(bonusNumber)) {
-            throw new IllegalArgumentException("보너스 번호는 당첨 번호와 중복될 수 없습니다.");
-        }
-    }
-
-    public int getBonusNumber() {
-        return bonusNumber;
-    }
 
     public List<Integer> getNumbers() {
         return List.of(); //TDOO
