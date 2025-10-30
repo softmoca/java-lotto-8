@@ -83,6 +83,8 @@ public class LottoController {
 
     private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers, int purchaseAmount) {
         WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
+        outputView.printStatisticsHeader();
+        outputView.printStatistics(statistics);
 
     }
 

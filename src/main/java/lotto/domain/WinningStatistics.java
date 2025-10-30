@@ -26,4 +26,8 @@ public class WinningStatistics {
         }
     }
 
+    public int getCountByRank(Rank rank) {
+        return statistics.getOrDefault(rank, 0);
+    }
+
 }
