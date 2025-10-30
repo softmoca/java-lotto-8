@@ -8,6 +8,8 @@ import lotto.domain.WinningStatistics;
 
 public class OutputView {
     private static final String ERROR_PREFIX = "[ERROR] ";
+    private static final String PROFIT_RATE_FORMAT = "총 수익률은 %.1f%%입니다.";
+
 
     public void printErrorMessage(String message) {
         if (message.startsWith(ERROR_PREFIX)) {
@@ -40,6 +42,10 @@ public class OutputView {
         printRankStatistics(Rank.THIRD, statistics);
         printRankStatistics(Rank.SECOND, statistics);
         printRankStatistics(Rank.FIRST, statistics);
+    }
+
+    public void printProfitRate(double profitRate) {
+        System.out.println(String.format(PROFIT_RATE_FORMAT, profitRate));
     }
 
     private void printRankStatistics(Rank rank, WinningStatistics statistics) {
