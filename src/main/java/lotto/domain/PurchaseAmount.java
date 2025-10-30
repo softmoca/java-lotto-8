@@ -1,5 +1,7 @@
 package lotto.domain;
 
+import lotto.exception.ErrorMessage;
+
 public class PurchaseAmount {
 
     private static final int LOTTO_PRICE = 1000;
@@ -34,7 +36,7 @@ public class PurchaseAmount {
     private void validatePositive(int amount) {
         if (amount < MINIMUM_AMOUNT) {
             throw new IllegalArgumentException(
-                    "구입 금액은 " + MINIMUM_AMOUNT + "원 이상이어야 합니다."
+                    ErrorMessage.INVALID_PURCHASE_AMOUNT_POSITIVE.getMessage()
             );
         }
     }
