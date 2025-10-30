@@ -27,7 +27,7 @@ public class LottoController {
 
     public void run() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
-        List<Lotto> lottos = purchaseLottos(1000); //TDODO
+        List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
         WinningNumbers winningNumbers = inputWinningNumbers();
         checkAndPrintResult(lottos, winningNumbers, 1000);// TODO
 
@@ -45,11 +45,9 @@ public class LottoController {
         }
     }
 
-    private List<Lotto> purchaseLottos(int purchaseAmount) {
-        List<Lotto> lottos = lottoShop.buyLottos(purchaseAmount);
-
-        int count = lottos.size();
-        outputView.printPurchaseCount(count);
+    private List<Lotto> purchaseLottos(int quantity) {
+        List<Lotto> lottos = lottoShop.buyLottos(quantity);
+        outputView.printPurchaseCount(quantity);
         outputView.printLottos(lottos);
         return lottos;
     }

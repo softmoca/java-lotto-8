@@ -6,22 +6,14 @@ import lotto.Lotto;
 import lotto.domain.LottoNumberGenerator;
 
 public class LottoShop {
-
-    private static final int LOTTO_PRICE = 1000;
-
     private final LottoNumberGenerator numberGenerator;
 
     public LottoShop(LottoNumberGenerator numberGenerator) {
         this.numberGenerator = numberGenerator;
     }
 
-    public List<Lotto> buyLottos(int purchaseAmount) {
-        int quantity = calculateQuantity(purchaseAmount);
+    public List<Lotto> buyLottos(int quantity) {
         return generateLottos(quantity);
-    }
-
-    private int calculateQuantity(int purchaseAmount) {
-        return purchaseAmount / LOTTO_PRICE;
     }
 
     private List<Lotto> generateLottos(int quantity) {

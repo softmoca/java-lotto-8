@@ -5,27 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 
 public class InputValidator {
-
-    private static final int LOTTO_PRICE = 1000;
     private static final int MIN_LOTTO_NUMBER = 1;
     private static final int MAX_LOTTO_NUMBER = 45;
     private static final int WINNING_NUMBER_COUNT = 6;
     private static final String NUMBER_DELIMITER = ",";
-
-
-    public static int validatePurchaseAmount(String input) {
-        int amount = validateAndParseInteger(input);
-
-        if (amount <= 0) {
-            throw new IllegalArgumentException("구입 금액은 0보다 커야 합니다.");
-        }
-
-        if (amount % LOTTO_PRICE != 0) {
-            throw new IllegalArgumentException("구입 금액은 1,000원 단위여야 합니다.");
-        }
-
-        return amount;
-    }
 
 
     public static List<Integer> validateWinningNumbers(String input) {

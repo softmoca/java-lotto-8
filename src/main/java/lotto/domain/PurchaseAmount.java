@@ -21,6 +21,11 @@ public class PurchaseAmount {
         return new PurchaseAmount(amount);
     }
 
+    public int getLottoQuantity() {
+        return amount / LOTTO_PRICE;
+    }
+
+
     private static int parseAmount(String input) {
         try {
             return Integer.parseInt(input);
