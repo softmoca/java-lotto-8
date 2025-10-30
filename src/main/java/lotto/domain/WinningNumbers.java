@@ -18,5 +18,13 @@ public class WinningNumbers {
             throw new IllegalArgumentException("보너스 번호는 당첨 번호와 중복될 수 없습니다.");
         }
     }
-    
+
+    public int getBonusNumber() {
+        return bonusNumber;
+    }
+
+    public List<Integer> getNumbers() {
+        return numbers;
+    }
+
 }

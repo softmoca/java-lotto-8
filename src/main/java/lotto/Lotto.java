@@ -22,6 +22,21 @@ public class Lotto {
         return numbers;
     }
 
+    public int countMatchingNumbers(List<Integer> winningNumbers) {// 일치 개수
+        int count = 0;
+        for (Integer number : numbers) {
+            if (winningNumbers.contains(number)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean hasNumber(int number) {
+        return numbers.contains(number);
+    }
+
+
     private List<Integer> sortNumbers(List<Integer> numbers) {
         List<Integer> sortedNumbers = new ArrayList<>(numbers);
         Collections.sort(sortedNumbers);
