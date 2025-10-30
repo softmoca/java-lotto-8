@@ -5,7 +5,6 @@ import lotto.Lotto;
 import lotto.domain.BonusNumber;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
-import lotto.domain.WinningNumbers;
 import lotto.domain.WinningStatistics;
 import lotto.service.LottoMatcher;
 import lotto.service.LottoShop;
@@ -29,10 +28,10 @@ public class LottoController {
     public void run() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
-        WinningNumbers winningNumbers = inputWinningNumbersList();
+        Lotto winningNumbers = inputWinningNumbersList();
         BonusNumber bonusNumber = inputBonusNumber(winningNumbers);
 
-        checkAndPrintResult(lottos, winningNumbers, 1000);// TODO
+        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount(), bonusNumber);// TODO
 
     }
 
@@ -56,7 +55,7 @@ public class LottoController {
     }
 
 
-    private WinningNumbers inputWinningNumbersList() {
+    private Lotto inputWinningNumbersList() {
         while (true) {
             try {
                 List<String> numberStrings = inputView.readWinningNumbers();
@@ -64,14 +63,14 @@ public class LottoController {
                         .map(InputParser::parseToInteger)
                         .toList();
 
-                return new WinningNumbers(numbers);
+                return new Lotto(numbers);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
     }
 
-    private BonusNumber inputBonusNumber(WinningNumbers winningNumbers) {
+    private BonusNumber inputBonusNumber(Lotto winningNumbers) {
         while (true) {
             try {
                 String input = inputView.readBonusNumber();
@@ -84,8 +83,9 @@ public class LottoController {
         }
     }
 
-    private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers, int purchaseAmount) {
-        WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
+    private void checkAndPrintResult(List<Lotto> lottos, Lotto winningNumbers, int purchaseAmount,
+                                     BonusNumber bonusNumber) {
+        WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers, bonusNumber);
         outputView.printStatisticsHeader();
         outputView.printStatistics(statistics);
 

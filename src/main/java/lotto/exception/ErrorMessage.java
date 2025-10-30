@@ -23,7 +23,7 @@ public enum ErrorMessage {
     ENDS_WITH_DELIMITER("쉼표로 끝날 수 없습니다."),
 
     // 보너스 번호
-    BONUS_NUMBER_OUT_OF_RANGE("보너스 번호는 %d부터 %d 사이의 숫자여야 합니다."),
+    BONUS_NUMBER_OUT_OF_RANGE("보너스 번호는 1부터 45 사이의 숫자여야 합니다."),
     BONUS_NUMBER_DUPLICATED("보너스 번호는 당첨 번호와 중복될 수 없습니다.");
 
     private static final String ERROR_PREFIX = "[ERROR] ";

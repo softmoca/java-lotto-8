@@ -39,6 +39,9 @@ public class PurchaseAmount {
         validateUnit(amount);
     }
 
+    public int getAmount() {
+        return amount;
+    }
 
     private void validatePositive(int amount) {
         if (amount < MINIMUM_AMOUNT) {

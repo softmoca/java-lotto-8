@@ -3,6 +3,8 @@ package lotto.domain;
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_DUPLICATED;
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_OUT_OF_RANGE;
 
+import lotto.Lotto;
+
 public class BonusNumber {
     private static final int MIN_LOTTO_NUMBER = 1;
     private static final int MAX_LOTTO_NUMBER = 45;
@@ -13,7 +15,7 @@ public class BonusNumber {
         this.value = value;
     }
 
-    public static BonusNumber of(int value, WinningNumbers winningNumbers) {
+    public static BonusNumber of(int value, Lotto winningNumbers) {
         validateRange(value);
         validateDuplication(value, winningNumbers);
         return new BonusNumber(value);
@@ -27,12 +29,16 @@ public class BonusNumber {
         }
     }
 
-    private static void validateDuplication(int value, WinningNumbers winningNumbers) {
+    private static void validateDuplication(int value, Lotto winningNumbers) {
         if (winningNumbers.hasNumber(value)) {
             throw new IllegalArgumentException(
                     BONUS_NUMBER_DUPLICATED.getMessage()
             );
         }
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override
