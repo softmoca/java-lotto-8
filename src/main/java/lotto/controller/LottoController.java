@@ -2,6 +2,7 @@ package lotto.controller;
 
 import java.util.List;
 import lotto.Lotto;
+import lotto.domain.BonusNumber;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
 import lotto.domain.WinningNumbers;
@@ -28,6 +29,7 @@ public class LottoController {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
         WinningNumbers winningNumbers = inputWinningNumbersList();
+        BonusNumber bonusNumber = inputBonusNumber(winningNumbers);
 
         checkAndPrintResult(lottos, winningNumbers, 1000);// TODO
 
@@ -65,10 +67,11 @@ public class LottoController {
         }
     }
 
-    private int inputBonusNumber() {
+    private BonusNumber inputBonusNumber(WinningNumbers winningNumbers) {
         while (true) {
             try {
-                String input = inputView.readBonusNumber();
+                String value = inputView.readBonusNumber();
+                return BonusNumber.of(value, winningNumbers);
 
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());

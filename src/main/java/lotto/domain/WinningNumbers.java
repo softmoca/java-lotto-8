@@ -21,6 +21,10 @@ public class WinningNumbers {
     }
 
 
+    public boolean hasNumber(int number) {
+        return winningLotto.hasNumber(number);
+    }
+
     public List<Integer> getNumbers() {
         return List.of(); //TDOO
     }
