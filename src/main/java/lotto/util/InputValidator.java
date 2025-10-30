@@ -1,77 +1,48 @@
 package lotto.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 public class InputValidator {
-    private static final int MIN_LOTTO_NUMBER = 1;
-    private static final int MAX_LOTTO_NUMBER = 45;
-    private static final int WINNING_NUMBER_COUNT = 6;
-    private static final String NUMBER_DELIMITER = ",";
+    private static final String DELIMITER = ",";
+    private static final String EMPTY_INPUT_ERROR = "입력값이 비어있습니다.";
+    private static final String NO_DELIMITER_ERROR = "쉼표(,)로 구분된 입력이 필요합니다.";
+    private static final String CONSECUTIVE_DELIMITER_ERROR = "연속된 쉼표는 허용되지 않습니다.";
+    private static final String START_WITH_DELIMITER_ERROR = "쉼표로 시작할 수 없습니다.";
+    private static final String END_WITH_DELIMITER_ERROR = "쉼표로 끝날 수 없습니다.";
 
-
-    public static List<Integer> validateWinningNumbers(String input) {
-        String[] tokens = input.split(NUMBER_DELIMITER);
-
-        if (tokens.length != WINNING_NUMBER_COUNT) {
-            throw new IllegalArgumentException("당첨 번호는 6개여야 합니다.");
-        }
-
-        List<Integer> numbers = parseNumbers(tokens);
-        validateNumberRange(numbers);
-        validateDuplication(numbers);
-
-        return numbers;
+    public static void validateInput(String input) {
+        validateNotEmpty(input);
+        validateContainsDelimiter(input);
+        validateNoConsecutiveDelimiters(input);
+        validateNotStartWithDelimiter(input);
+        validateNotEndWithDelimiter(input);
     }
 
-    public static int validateBonusNumber(String input) {
-        int bonusNumber = validateAndParseInteger(input);
-        validateSingleNumberRange(bonusNumber);
-        return bonusNumber;
-    }
-
-    private static int validateAndParseInteger(String input) {
-        try {
-            return Integer.parseInt(input.trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("구입 금액은 숫자여야 합니다.");
+    private static void validateNotEmpty(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException(EMPTY_INPUT_ERROR);
         }
     }
 
-    private static List<Integer> parseNumbers(String[] tokens) {
-        List<Integer> numbers = new ArrayList<>();
-
-        for (String token : tokens) {
-            try {
-                numbers.add(Integer.parseInt(token.trim()));
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("로또 번호는 숫자여야 합니다.");
-            }
-        }
-
-        return numbers;
-    }
-
-
-    private static void validateNumberRange(List<Integer> numbers) {
-        for (Integer number : numbers) {
-            validateSingleNumberRange(number);
+    private static void validateContainsDelimiter(String input) {
+        if (!input.contains(DELIMITER)) {
+            throw new IllegalArgumentException(NO_DELIMITER_ERROR);
         }
     }
 
-    private static void validateSingleNumberRange(int number) {
-        if (number < MIN_LOTTO_NUMBER || number > MAX_LOTTO_NUMBER) {
-            throw new IllegalArgumentException("로또 번호는 1부터 45 사이의 숫자여야 합니다.");
+    private static void validateNoConsecutiveDelimiters(String input) {
+        if (input.contains(DELIMITER + DELIMITER)) {
+            throw new IllegalArgumentException(CONSECUTIVE_DELIMITER_ERROR);
         }
     }
 
-    private static void validateDuplication(List<Integer> numbers) {
-        HashSet<Integer> uniqueNumbers = new HashSet<>(numbers);
-        if (uniqueNumbers.size() != numbers.size()) {
-            throw new IllegalArgumentException("당첨 번호는 중복될 수 없습니다.");
+    private static void validateNotStartWithDelimiter(String input) {
+        if (input.startsWith(DELIMITER)) {
+            throw new IllegalArgumentException(START_WITH_DELIMITER_ERROR);
         }
     }
 
-
+    private static void validateNotEndWithDelimiter(String input) {
+        if (input.endsWith(DELIMITER)) {
+            throw new IllegalArgumentException(END_WITH_DELIMITER_ERROR);
+        }
+    }
 }

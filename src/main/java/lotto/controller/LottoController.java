@@ -8,7 +8,6 @@ import lotto.domain.WinningNumbers;
 import lotto.domain.WinningStatistics;
 import lotto.service.LottoMatcher;
 import lotto.service.LottoShop;
-import lotto.util.InputValidator;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -61,8 +60,8 @@ public class LottoController {
     private List<Integer> inputWinningNumbersList() {
         while (true) {
             try {
-                String input = inputView.readWinningNumbers();
-                return InputValidator.validateWinningNumbers(input);
+                List<String> input = inputView.readWinningNumbers();
+
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
@@ -73,7 +72,7 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readBonusNumber();
-                return InputValidator.validateBonusNumber(input);
+
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
