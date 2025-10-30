@@ -59,9 +59,12 @@ public class LottoController {
     private WinningNumbers inputWinningNumbersList() {
         while (true) {
             try {
-                List<String> temp = inputView.readWinningNumbers();
+                List<String> numberStrings = inputView.readWinningNumbers();
+                List<Integer> numbers = numberStrings.stream()
+                        .map(InputParser::parseToInteger)
+                        .toList();
 
-                return new WinningNumbers(temp);
+                return new WinningNumbers(numbers);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }

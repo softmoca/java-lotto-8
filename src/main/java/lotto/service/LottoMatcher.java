@@ -21,7 +21,7 @@ public class LottoMatcher {
 
     private Rank determineRank(Lotto lotto, WinningNumbers winningNumbers) {
         int matchCount = lotto.countMatchingNumbers(winningNumbers.getNumbers());
-        boolean hasBonus = lotto.hasNumber(winningNumbers.getBonusNumber());
+        boolean hasBonus = lotto.hasNumber(0);
 
         return Rank.valueOf(matchCount, hasBonus);
     }
