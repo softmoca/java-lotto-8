@@ -12,8 +12,17 @@ public class PurchaseAmount {
         this.amount = amount;
     }
 
-    public static PurchaseAmount from(int amount) {
+    public static PurchaseAmount from(String input) {
+        int amount = parseAmount(input);
         return new PurchaseAmount(amount);
+    }
+
+    private static int parseAmount(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("구입 금액은 숫자로 입력해야 합니다.");
+        }
     }
 
     private void validate(int amount) {

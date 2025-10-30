@@ -38,7 +38,7 @@ public class LottoController {
         while (true) {
             try {
                 String input = inputView.readPurchaseAmount();
-                return PurchaseAmount.from(Integer.parseInt(input));
+                return PurchaseAmount.from(input);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
