@@ -9,6 +9,7 @@ import lotto.domain.WinningNumbers;
 import lotto.domain.WinningStatistics;
 import lotto.service.LottoMatcher;
 import lotto.service.LottoShop;
+import lotto.util.InputParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -70,7 +71,8 @@ public class LottoController {
     private BonusNumber inputBonusNumber(WinningNumbers winningNumbers) {
         while (true) {
             try {
-                String value = inputView.readBonusNumber();
+                String input = inputView.readBonusNumber();
+                int value = InputParser.parseToInteger(input);
                 return BonusNumber.of(value, winningNumbers);
 
             } catch (IllegalArgumentException e) {

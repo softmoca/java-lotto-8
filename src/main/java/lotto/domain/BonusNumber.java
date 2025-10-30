@@ -1,7 +1,5 @@
 package lotto.domain;
 
-import lotto.util.InputParser;
-
 public class BonusNumber {
     private static final int MIN_NUMBER = 1;
     private static final int MAX_NUMBER = 45;
@@ -12,8 +10,8 @@ public class BonusNumber {
         this.value = value;
     }
 
-    public static BonusNumber of(String input, WinningNumbers winningNumbers) {
-        int value = InputParser.parseToInteger(input);
+    public static BonusNumber of(int value, WinningNumbers winningNumbers) {
+
         validateRange(value);
         validateDuplication(value, winningNumbers);
         return new BonusNumber(value);
