@@ -1,5 +1,9 @@
 package lotto;
 
+import static lotto.exception.ErrorMessage.INVALID_LOTTO_DUPLICATION;
+import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_RANGE;
+import static lotto.exception.ErrorMessage.INVALID_LOTTO_SIZE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,14 +29,14 @@ public class Lotto {
 
     private void validateSize(List<Integer> numbers) {
         if (numbers.size() != LOTTO_NUMBER_COUNT) {
-            throw new IllegalArgumentException("[ERROR] 로또 번호는 6개여야 합니다.");
+            throw new IllegalArgumentException(INVALID_LOTTO_SIZE.getMessage());
         }
     }
 
     private void validateRange(List<Integer> numbers) {
         for (Integer number : numbers) {
             if (number < MIN_LOTTO_NUMBER || number > MAX_LOTTO_NUMBER) {
-                throw new IllegalArgumentException("[ERROR] 로또 번호는 1부터 45 사이의 숫자여야 합니다.");
+                throw new IllegalArgumentException(INVALID_LOTTO_NUMBER_RANGE.getMessage());
             }
         }
     }
@@ -40,7 +44,7 @@ public class Lotto {
     private void validateDuplication(List<Integer> numbers) {
         HashSet<Integer> uniqueNumbers = new HashSet<>(numbers);
         if (uniqueNumbers.size() != numbers.size()) {
-            throw new IllegalArgumentException("[ERROR] 로또 번호는 중복될 수 없습니다.");
+            throw new IllegalArgumentException(INVALID_LOTTO_DUPLICATION.getMessage());
         }
     }
 
