@@ -1,17 +1,28 @@
 package lotto.domain;
 
 import java.util.List;
+import lotto.Lotto;
+import lotto.util.InputParser;
 
 public class WinningNumbers {
 
-    private final List<Integer> numbers;
+    private final Lotto winningLotto;
     private final int bonusNumber;
 
-    public WinningNumbers(List<Integer> numbers, int bonusNumber) {
-        validateBonusNumber(numbers, bonusNumber);
-        this.numbers = numbers;
+
+    public WinningNumbers(List<String> numberStrings, int bonusNumber) {
+        List<Integer> numbers = convertToIntegers(numberStrings);
+        this.winningLotto = new Lotto(numbers);
         this.bonusNumber = bonusNumber;
+        validateBonusNumber(numbers, bonusNumber);
     }
+
+    private List<Integer> convertToIntegers(List<String> numberStrings) {
+        return numberStrings.stream()
+                .map(InputParser::parseToInteger)
+                .toList();
+    }
+
 
     private void validateBonusNumber(List<Integer> numbers, int bonusNumber) {
         if (numbers.contains(bonusNumber)) {
@@ -24,7 +35,7 @@ public class WinningNumbers {
     }
 
     public List<Integer> getNumbers() {
-        return numbers;
+        return List.of(); //TDOO
     }
 
 }

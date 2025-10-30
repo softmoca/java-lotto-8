@@ -12,5 +12,14 @@ public class InputParser {
                 .map(String::trim)
                 .toList();
     }
-    
+
+
+    public static int parseToInteger(String input) {
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("숫자 형식이 올바르지 않습니다.");
+        }
+    }
+
 }

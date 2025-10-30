@@ -52,16 +52,15 @@ public class LottoController {
     }
 
     private WinningNumbers inputWinningNumbers() {
-        List<Integer> numbers = inputWinningNumbersList();
+        List<String> numbers = inputWinningNumbersList();
         int bonusNumber = inputBonusNumber();
         return new WinningNumbers(numbers, bonusNumber);
     }
 
-    private List<Integer> inputWinningNumbersList() {
+    private List<String> inputWinningNumbersList() {
         while (true) {
             try {
-                List<String> input = inputView.readWinningNumbers();
-
+                return inputView.readWinningNumbers();
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
