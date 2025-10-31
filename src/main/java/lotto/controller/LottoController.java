@@ -5,6 +5,7 @@ import lotto.domain.BonusNumber;
 import lotto.domain.Lotto;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
+import lotto.domain.WinningNumbers;
 import lotto.domain.WinningStatistics;
 import lotto.service.LottoMatcher;
 import lotto.service.LottoShop;
@@ -28,10 +29,9 @@ public class LottoController {
     public void run() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
-        Lotto winningNumbers = inputWinningNumbersList();
-        BonusNumber bonusNumber = inputBonusNumber(winningNumbers);
+        WinningNumbers winningNumbers = inputWinningNumbers();  // 변경: 하나의 객체로 통합
 
-        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount(), bonusNumber);
+        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount());
 
     }
 
@@ -52,6 +52,12 @@ public class LottoController {
         outputView.printPurchaseCount(quantity);
         outputView.printLottos(lottos);
         return lottos;
+    }
+
+    private WinningNumbers inputWinningNumbers() {
+        Lotto winningLotto = inputWinningNumbersList();
+        BonusNumber bonusNumber = inputBonusNumber(winningLotto);
+        return new WinningNumbers(winningLotto, bonusNumber);
     }
 
 
@@ -83,9 +89,8 @@ public class LottoController {
         }
     }
 
-    private void checkAndPrintResult(List<Lotto> lottos, Lotto winningNumbers, int purchaseAmount,
-                                     BonusNumber bonusNumber) {
-        WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers, bonusNumber);
+    private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers, int purchaseAmount) {
+        WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
         outputView.printStatisticsHeader();
         outputView.printStatistics(statistics);
 
