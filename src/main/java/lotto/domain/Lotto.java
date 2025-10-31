@@ -49,18 +49,9 @@ public class Lotto {
     }
 
     public List<Integer> getNumbers() {
-        return Collections.unmodifiableList(numbers);  // 불변 리스트 반환
+        return Collections.unmodifiableList(numbers);
     }
 
-    public int countMatchingNumbers(List<Integer> winningNumbers) {// 일치 개수
-        int count = 0;
-        for (Integer number : numbers) {
-            if (winningNumbers.contains(number)) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     public boolean contains(int number) {
         return numbers.contains(number);

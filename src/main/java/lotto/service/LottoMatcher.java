@@ -19,10 +19,16 @@ public class LottoMatcher {
         return statistics;
     }
 
-    private Rank determineRank(Lotto lotto, Lotto winningNumbers, BonusNumber bonusNumber) {
-        int matchCount = lotto.countMatchingNumbers(winningNumbers.getNumbers());
-        boolean hasBonus = lotto.contains(bonusNumber.getValue());
+    private Rank determineRank(Lotto purchasedLotto, Lotto winningNumbers, BonusNumber bonusNumber) {
+        int matchCount = countMatches(purchasedLotto, winningNumbers);
+        boolean hasBonus = purchasedLotto.contains(bonusNumber.getValue());
 
         return Rank.valueOf(matchCount, hasBonus);
+    }
+
+    private int countMatches(Lotto purchasedLotto, Lotto winningNumbers) {
+        return (int) purchasedLotto.getNumbers().stream()
+                .filter(winningNumbers::contains)
+                .count();
     }
 }
