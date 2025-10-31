@@ -1,0 +1,62 @@
+package lotto.controller;
+
+import java.util.List;
+import java.util.function.Supplier;
+import lotto.domain.BonusNumber;
+import lotto.domain.Lotto;
+import lotto.domain.PurchaseAmount;
+import lotto.domain.WinningNumbers;
+import lotto.util.InputParser;
+import lotto.view.InputView;
+import lotto.view.OutputView;
+
+public class InputHandler {
+    private final InputView inputView;
+    private final OutputView outputView;
+
+    public InputHandler(InputView inputView, OutputView outputView) {
+        this.inputView = inputView;
+        this.outputView = outputView;
+    }
+
+    public PurchaseAmount inputPurchaseAmount() {
+        return retryOnException(() -> {
+            String input = inputView.readPurchaseAmount();
+            return PurchaseAmount.from(input);
+        });
+    }
+
+    public WinningNumbers inputWinningNumbers() {
+        Lotto winningLotto = inputWinningNumbersList();
+        BonusNumber bonusNumber = inputBonusNumber(winningLotto);
+        return new WinningNumbers(winningLotto, bonusNumber);
+    }
+
+    private Lotto inputWinningNumbersList() {
+        return retryOnException(() -> {
+            List<String> numberStrings = inputView.readWinningNumbers();
+            List<Integer> numbers = numberStrings.stream()
+                    .map(InputParser::parseToInteger)
+                    .toList();
+            return new Lotto(numbers);
+        });
+    }
+
+    private BonusNumber inputBonusNumber(Lotto winningNumbers) {
+        return retryOnException(() -> {
+            String input = inputView.readBonusNumber();
+            int value = InputParser.parseToInteger(input);
+            return BonusNumber.of(value, winningNumbers);
+        });
+    }
+
+    private <T> T retryOnException(Supplier<T> inputSupplier) {
+        while (true) {
+            try {
+                return inputSupplier.get();
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+}
