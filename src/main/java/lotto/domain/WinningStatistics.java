@@ -41,10 +41,4 @@ public class WinningStatistics {
         return totalPrize;
     }
 
-    public double calculateProfitRate(int purchaseAmount) {
-        long totalPrize = calculateTotalPrize();
-        double profitRate = (double) totalPrize / purchaseAmount * 100;
-        return Math.round(profitRate * 10) / 10.0;
-    }
-
 }

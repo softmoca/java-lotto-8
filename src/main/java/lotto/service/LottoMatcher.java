@@ -12,7 +12,7 @@ public class LottoMatcher {
         WinningStatistics statistics = new WinningStatistics();
 
         for (Lotto lotto : lottos) {
-            Rank rank = winningNumbers.match(lotto);  // 책임을 WinningNumbers에 위임
+            Rank rank = winningNumbers.match(lotto);
             statistics.addResult(rank);
         }
 

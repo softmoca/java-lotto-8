@@ -3,6 +3,8 @@ package lotto.controller;
 import java.util.List;
 import lotto.domain.BonusNumber;
 import lotto.domain.Lotto;
+import lotto.domain.LottoResult;
+import lotto.domain.ProfitRate;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
 import lotto.domain.WinningNumbers;
@@ -29,9 +31,9 @@ public class LottoController {
     public void run() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
-        WinningNumbers winningNumbers = inputWinningNumbers();  // 변경: 하나의 객체로 통합
+        WinningNumbers winningNumbers = inputWinningNumbers();
 
-        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount());
+        checkAndPrintResult(lottos, winningNumbers, purchaseAmount);
 
     }
 
@@ -89,14 +91,16 @@ public class LottoController {
         }
     }
 
-    private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers, int purchaseAmount) {
+    private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers,
+                                     PurchaseAmount purchaseAmount) {
         WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
+        LottoResult result = new LottoResult(statistics, purchaseAmount);
+
         outputView.printStatisticsHeader();
-        outputView.printStatistics(statistics);
+        outputView.printStatistics(result.getStatistics());
 
-        double profitRate = statistics.calculateProfitRate(purchaseAmount);
-        outputView.printProfitRate(profitRate);
-
+        ProfitRate profitRate = result.calculateProfitRate();
+        outputView.printProfitRate(profitRate.getValue());
     }
 
 
