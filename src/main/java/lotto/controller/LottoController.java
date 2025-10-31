@@ -3,13 +3,12 @@ package lotto.controller;
 import java.util.List;
 import lotto.domain.BonusNumber;
 import lotto.domain.Lotto;
+import lotto.domain.LottoGame;
 import lotto.domain.LottoResult;
 import lotto.domain.ProfitRate;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
 import lotto.domain.WinningNumbers;
-import lotto.domain.WinningStatistics;
-import lotto.service.LottoMatcher;
 import lotto.service.LottoShop;
 import lotto.util.InputParser;
 import lotto.view.InputView;
@@ -19,24 +18,41 @@ public class LottoController {
     private final InputView inputView;
     private final OutputView outputView;
     private final LottoShop lottoShop;
-    private final LottoMatcher lottoMatcher;
 
     public LottoController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
         this.lottoShop = new LottoShop(new RandomLottoNumberGenerator());
-        this.lottoMatcher = new LottoMatcher();
     }
 
     public void run() {
+        LottoGame game = prepareGame();
+        printPurchaseInfo(game);
+
+        LottoResult result = game.play();
+        printResult(result);
+    }
+
+    private LottoGame prepareGame() {
         PurchaseAmount purchaseAmount = inputPurchaseAmount();
         List<Lotto> lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
         WinningNumbers winningNumbers = inputWinningNumbers();
 
-        checkAndPrintResult(lottos, winningNumbers, purchaseAmount);
-
+        return new LottoGame(purchaseAmount, lottos, winningNumbers);
     }
 
+    private void printResult(LottoResult result) {
+        outputView.printStatisticsHeader();
+        outputView.printStatistics(result.getStatistics());
+
+        ProfitRate profitRate = result.calculateProfitRate();
+        outputView.printProfitRate(profitRate.getValue());
+    }
+
+    private void printPurchaseInfo(LottoGame game) {
+        outputView.printPurchaseCount(game.getLottoQuantity());
+        outputView.printLottos(game.getPurchasedLottos());
+    }
 
     private PurchaseAmount inputPurchaseAmount() {
         while (true) {
@@ -90,18 +106,5 @@ public class LottoController {
             }
         }
     }
-
-    private void checkAndPrintResult(List<Lotto> lottos, WinningNumbers winningNumbers,
-                                     PurchaseAmount purchaseAmount) {
-        WinningStatistics statistics = lottoMatcher.match(lottos, winningNumbers);
-        LottoResult result = new LottoResult(statistics, purchaseAmount);
-
-        outputView.printStatisticsHeader();
-        outputView.printStatistics(result.getStatistics());
-
-        ProfitRate profitRate = result.calculateProfitRate();
-        outputView.printProfitRate(profitRate.getValue());
-    }
-
 
 }
