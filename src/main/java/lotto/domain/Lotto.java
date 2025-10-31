@@ -49,7 +49,7 @@ public class Lotto {
     }
 
     public List<Integer> getNumbers() {
-        return numbers;
+        return Collections.unmodifiableList(numbers);  // 불변 리스트 반환
     }
 
     public int countMatchingNumbers(List<Integer> winningNumbers) {// 일치 개수
@@ -62,10 +62,9 @@ public class Lotto {
         return count;
     }
 
-    public boolean hasNumber(int number) {
+    public boolean contains(int number) {
         return numbers.contains(number);
     }
-
 
     private List<Integer> sortNumbers(List<Integer> numbers) {
         List<Integer> sortedNumbers = new ArrayList<>(numbers);

@@ -28,7 +28,7 @@ public class BonusNumber {
     }
 
     private static void validateDuplication(int value, Lotto winningNumbers) {
-        if (winningNumbers.hasNumber(value)) {
+        if (winningNumbers.contains(value)) {
             throw new IllegalArgumentException(
                     BONUS_NUMBER_DUPLICATED.getMessage()
             );
