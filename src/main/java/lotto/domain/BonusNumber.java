@@ -3,8 +3,6 @@ package lotto.domain;
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_DUPLICATED;
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_OUT_OF_RANGE;
 
-import lotto.Lotto;
-
 public class BonusNumber {
     private static final int MIN_LOTTO_NUMBER = 1;
     private static final int MAX_LOTTO_NUMBER = 45;

@@ -1,8 +1,8 @@
 package lotto.controller;
 
 import java.util.List;
-import lotto.Lotto;
 import lotto.domain.BonusNumber;
+import lotto.domain.Lotto;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
 import lotto.domain.WinningStatistics;
@@ -31,7 +31,7 @@ public class LottoController {
         Lotto winningNumbers = inputWinningNumbersList();
         BonusNumber bonusNumber = inputBonusNumber(winningNumbers);
 
-        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount(), bonusNumber);// TODO
+        checkAndPrintResult(lottos, winningNumbers, purchaseAmount.getAmount(), bonusNumber);
 
     }
 

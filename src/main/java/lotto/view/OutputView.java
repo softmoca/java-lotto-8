@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import lotto.Lotto;
+import lotto.domain.Lotto;
 import lotto.domain.Rank;
 import lotto.domain.WinningStatistics;
 

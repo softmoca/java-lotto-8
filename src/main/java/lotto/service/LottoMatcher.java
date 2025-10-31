@@ -1,8 +1,8 @@
 package lotto.service;
 
 import java.util.List;
-import lotto.Lotto;
 import lotto.domain.BonusNumber;
+import lotto.domain.Lotto;
 import lotto.domain.Rank;
 import lotto.domain.WinningStatistics;
 

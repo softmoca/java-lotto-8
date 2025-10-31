@@ -1,4 +1,4 @@
-package lotto;
+package lotto.domain;
 
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_DUPLICATION;
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_RANGE;
