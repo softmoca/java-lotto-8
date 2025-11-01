@@ -2,6 +2,7 @@ package lotto.view;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import lotto.domain.Lotto;
@@ -62,6 +63,7 @@ public class OutputView {
 
     private void printLotto(Lotto lotto) {
         List<Integer> numbers = new ArrayList<>(lotto.getNumbers());
+        Collections.sort(numbers);
         System.out.println(numbers);
     }
 
