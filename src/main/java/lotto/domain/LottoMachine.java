@@ -2,19 +2,19 @@ package lotto.domain;
 
 import java.util.List;
 
-public class LottoGame {
+public class LottoMachine {
     private final PurchaseAmount purchaseAmount;
     private final List<Lotto> purchasedLottos;
     private final WinningNumbers winningNumbers;
 
-    public LottoGame(PurchaseAmount purchaseAmount, List<Lotto> purchasedLottos,
-                     WinningNumbers winningNumbers) {
+    public LottoMachine(PurchaseAmount purchaseAmount, List<Lotto> purchasedLottos,
+                        WinningNumbers winningNumbers) {
         this.purchaseAmount = purchaseAmount;
         this.purchasedLottos = purchasedLottos;
         this.winningNumbers = winningNumbers;
     }
 
-    public LottoResult play() {
+    public LottoResult check() {
         WinningStatistics statistics = checkWinning();
         return new LottoResult(statistics, purchaseAmount);
     }
