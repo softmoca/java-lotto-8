@@ -2,7 +2,7 @@ package lotto.controller;
 
 import java.util.List;
 import lotto.domain.Lotto;
-import lotto.domain.LottoGame;
+import lotto.domain.LottoMachine;
 import lotto.domain.LottoResult;
 import lotto.domain.ProfitRate;
 import lotto.domain.PurchaseAmount;
@@ -25,22 +25,22 @@ public class LottoController {
     }
 
     public void run() {
-        LottoGame game = prepareGame();
+        LottoMachine game = prepareMachine();
         printPurchaseInfo(game);
 
-        LottoResult result = game.play();
+        LottoResult result = game.check();
         printResult(result);
     }
 
-    private LottoGame prepareGame() {
+    private LottoMachine prepareMachine() {
         PurchaseAmount purchaseAmount = inputHandler.inputPurchaseAmount();
         List<Lotto> lottos = lottoShop.buyLottos(purchaseAmount.getLottoQuantity());
         WinningNumbers winningNumbers = inputHandler.inputWinningNumbers();
 
-        return new LottoGame(purchaseAmount, lottos, winningNumbers);
+        return new LottoMachine(purchaseAmount, lottos, winningNumbers);
     }
 
-    private void printPurchaseInfo(LottoGame game) {
+    private void printPurchaseInfo(LottoMachine game) {
         outputView.printPurchaseCount(game.getLottoQuantity());
         outputView.printLottos(game.getPurchasedLottos());
     }
