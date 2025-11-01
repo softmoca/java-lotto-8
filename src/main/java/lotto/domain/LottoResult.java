@@ -1,6 +1,10 @@
 package lotto.domain;
 
 
+import lotto.domain.moeny.ProfitRate;
+import lotto.domain.moeny.PurchaseAmount;
+import lotto.domain.winning.WinningStatistics;
+
 public class LottoResult {
     private final WinningStatistics statistics;
     private final PurchaseAmount purchaseAmount;

@@ -1,4 +1,4 @@
-package lotto.domain;
+package lotto.domain.moeny;
 
 public class ProfitRate {
     private static final int PERCENTAGE_MULTIPLIER = 100;

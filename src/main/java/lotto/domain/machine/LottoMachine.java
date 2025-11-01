@@ -1,8 +1,13 @@
-package lotto.domain;
+package lotto.domain.machine;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lotto.domain.Lotto;
+import lotto.domain.moeny.PurchaseAmount;
+import lotto.domain.winning.Rank;
+import lotto.domain.winning.WinningNumbers;
+import lotto.domain.winning.WinningStatistics;
 
 
 public class LottoMachine {

@@ -1,12 +1,12 @@
 package lotto.controller;
 
-import lotto.domain.LottoMachine;
 import lotto.domain.LottoResult;
-import lotto.domain.ProfitRate;
-import lotto.domain.PurchaseAmount;
-import lotto.domain.RandomLottoNumberGenerator;
-import lotto.domain.WinningNumbers;
-import lotto.domain.WinningStatistics;
+import lotto.domain.machine.LottoMachine;
+import lotto.domain.machine.RandomLottoNumberGenerator;
+import lotto.domain.moeny.ProfitRate;
+import lotto.domain.moeny.PurchaseAmount;
+import lotto.domain.winning.WinningNumbers;
+import lotto.domain.winning.WinningStatistics;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 

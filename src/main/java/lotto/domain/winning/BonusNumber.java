@@ -1,7 +1,9 @@
-package lotto.domain;
+package lotto.domain.winning;
 
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_DUPLICATED;
 import static lotto.exception.ErrorMessage.BONUS_NUMBER_OUT_OF_RANGE;
+
+import lotto.domain.Lotto;
 
 public class BonusNumber {
     private static final int MIN_LOTTO_NUMBER = 1;

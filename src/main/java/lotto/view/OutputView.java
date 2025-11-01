@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import lotto.domain.Lotto;
-import lotto.domain.Rank;
-import lotto.domain.WinningStatistics;
+import lotto.domain.winning.Rank;
+import lotto.domain.winning.WinningStatistics;
 
 public class OutputView {
     private static final String ERROR_PREFIX = "[ERROR] ";

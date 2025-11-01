@@ -1,4 +1,4 @@
-package lotto.domain;
+package lotto.domain.moeny;
 
 import static lotto.exception.ErrorMessage.INVALID_PURCHASE_AMOUNT_FORMAT;
 import static lotto.exception.ErrorMessage.INVALID_PURCHASE_AMOUNT_INSUFFICIENT;
