@@ -2,12 +2,13 @@ package lotto.controller;
 
 import java.util.List;
 import lotto.domain.Lotto;
-import lotto.domain.LottoMachine;
 import lotto.domain.LottoResult;
+import lotto.domain.Lottos;
 import lotto.domain.ProfitRate;
 import lotto.domain.PurchaseAmount;
 import lotto.domain.RandomLottoNumberGenerator;
 import lotto.domain.WinningNumbers;
+import lotto.domain.WinningStatistics;
 import lotto.service.LottoShop;
 import lotto.view.InputView;
 import lotto.view.OutputView;
@@ -25,27 +26,31 @@ public class LottoController {
     }
 
     public void run() {
-        LottoMachine game = prepareMachine();
-        printPurchaseInfo(game);
-
-        LottoResult result = game.check();
-        printResult(result);
-    }
-
-    private LottoMachine prepareMachine() {
         PurchaseAmount purchaseAmount = inputHandler.inputPurchaseAmount();
-        List<Lotto> lottos = lottoShop.buyLottos(purchaseAmount.getLottoQuantity());
+        Lottos lottos = purchaseLottos(purchaseAmount.getLottoQuantity());
+
+        printPurchaseInfo(lottos);
+
         WinningNumbers winningNumbers = inputHandler.inputWinningNumbers();
-
-        return new LottoMachine(purchaseAmount, lottos, winningNumbers);
+        printResult(lottos, winningNumbers, purchaseAmount);
     }
 
-    private void printPurchaseInfo(LottoMachine game) {
-        outputView.printPurchaseCount(game.getLottoQuantity());
-        outputView.printLottos(game.getPurchasedLottos());
+    private Lottos purchaseLottos(int quantity) {
+        List<Lotto> lottoList = lottoShop.buyLottos(quantity);
+        return new Lottos(lottoList);
     }
 
-    private void printResult(LottoResult result) {
+
+    private void printPurchaseInfo(Lottos lottos) {
+        outputView.printPurchaseCount(lottos.size());
+        outputView.printLottos(lottos.getLottos());
+    }
+
+    private void printResult(Lottos lottos, WinningNumbers winningNumbers,
+                             PurchaseAmount purchaseAmount) {
+        WinningStatistics statistics = lottos.match(winningNumbers);
+        LottoResult result = new LottoResult(statistics, purchaseAmount);
+
         outputView.printStatisticsHeader();
         outputView.printStatistics(result.getStatistics());
 
