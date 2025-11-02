@@ -1,5 +1,7 @@
 package lotto.domain.winning;
 
+import java.util.Arrays;
+
 public enum Rank {
     FIRST(6, 2_000_000_000, false, "6개 일치"),
     SECOND(5, 30_000_000, true, "5개 일치, 보너스 볼 일치"),
@@ -21,23 +23,19 @@ public enum Rank {
     }
 
     public static Rank valueOf(int matchCount, boolean hasBonus) {
-        if (matchCount == 6) {
-            return FIRST;
-        }
-        if (matchCount == 5 && hasBonus) {
-            return SECOND;
-        }
-        if (matchCount == 5) {
-            return THIRD;
-        }
-        if (matchCount == 4) {
-            return FOURTH;
-        }
-        if (matchCount == 3) {
-            return FIFTH;
-        }
-        return NONE;
+        return Arrays.stream(values())
+                .filter(rank -> rank.matches(matchCount, hasBonus))
+                .findFirst()
+                .orElse(NONE);
     }
+
+    private boolean matches(int count, boolean bonus) {
+        if (this == NONE) {
+            return false;
+        }
+        return this.matchCount == count && this.requiresBonus == bonus;
+    }
+
 
     public int getPrizeAmount() {
         return prizeAmount;
