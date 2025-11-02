@@ -9,7 +9,7 @@ public class WinningStatistics {
     private final Map<Rank, Integer> rankCounts;
 
     private WinningStatistics(Map<Rank, Integer> rankCounts) {
-        this.rankCounts = rankCounts;
+        this.rankCounts = Map.copyOf(rankCounts);
     }
 
     public static WinningStatistics from(List<Rank> ranks) {
