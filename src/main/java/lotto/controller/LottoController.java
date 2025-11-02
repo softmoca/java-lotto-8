@@ -39,7 +39,7 @@ public class LottoController {
 
 
     private void printResult(WinningNumbers winningNumbers, PurchaseAmount purchaseAmount) {
-        WinningStatistics statistics = machine.check(winningNumbers);
+        WinningStatistics statistics = machine.calculateStatistics(winningNumbers);
         LottoResult result = new LottoResult(statistics, purchaseAmount);
 
         outputView.printStatisticsHeader();

@@ -1,40 +1,39 @@
 package lotto.domain.winning;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WinningStatistics {
 
-    private final Map<Rank, Integer> statistics;
+    private final Map<Rank, Integer> rankCounts;
 
-    public WinningStatistics() {
-        this.statistics = new HashMap<>();
-        initializeStatistics();
+    private WinningStatistics(Map<Rank, Integer> rankCounts) {
+        this.rankCounts = rankCounts;
     }
 
-    private void initializeStatistics() {
-        statistics.put(Rank.FIRST, 0);
-        statistics.put(Rank.SECOND, 0);
-        statistics.put(Rank.THIRD, 0);
-        statistics.put(Rank.FOURTH, 0);
-        statistics.put(Rank.FIFTH, 0);
-    }
+    public static WinningStatistics from(List<Rank> ranks) {
+        Map<Rank, Integer> rankCounts = new HashMap<>();
 
-    public void addResult(Rank rank) {
-        if (rank.isWinning()) {
-            statistics.put(rank, statistics.get(rank) + 1);
+        for (Rank rank : ranks) {
+            if (rank.isWinning()) {
+                rankCounts.put(rank, rankCounts.getOrDefault(rank, 0) + 1);
+            }
         }
+
+        return new WinningStatistics(rankCounts);
     }
+
 
     public int getCountByRank(Rank rank) {
-        return statistics.getOrDefault(rank, 0);
+        return rankCounts.getOrDefault(rank, 0);
     }
 
     public long calculateTotalPrize() {
         long totalPrize = 0;
 
-        for (Rank rank : statistics.keySet()) {
-            int count = statistics.get(rank);
+        for (Rank rank : rankCounts.keySet()) {
+            int count = rankCounts.get(rank);
             totalPrize += (long) rank.getPrizeAmount() * count;
         }
 

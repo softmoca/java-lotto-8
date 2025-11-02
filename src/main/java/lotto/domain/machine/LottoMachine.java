@@ -33,24 +33,13 @@ public class LottoMachine {
         return lottos;
     }
 
-    public WinningStatistics check(WinningNumbers winningNumbers) {
-        validatePurchased();
+    public WinningStatistics calculateStatistics(WinningNumbers winningNumbers) {
+        List<Rank> ranks = purchasedLottos.stream()
+                .map(winningNumbers::match)
+                .toList();
 
-        WinningStatistics statistics = new WinningStatistics();
-        for (Lotto lotto : purchasedLottos) {
-            Rank rank = winningNumbers.match(lotto);
-            statistics.addResult(rank);
-        }
-        return statistics;
+        return WinningStatistics.from(ranks);
     }
-
-
-    private void validatePurchased() {
-        if (purchasedLottos.isEmpty()) {
-            throw new IllegalStateException("로또를 먼저 구매해야 합니다.");
-        }
-    }
-
 
     public List<Lotto> getPurchasedLottos() {
         return Collections.unmodifiableList(purchasedLottos);
