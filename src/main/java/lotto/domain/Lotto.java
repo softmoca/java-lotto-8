@@ -5,7 +5,6 @@ import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_FORMAT;
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_RANGE;
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_SIZE;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class Lotto {
 
     public Lotto(List<Integer> numbers) {
         validate(numbers);
-        this.numbers = numbers;
+        this.numbers = List.copyOf(numbers);
     }
 
     public static Lotto from(List<String> numberStrings) {
@@ -66,7 +65,7 @@ public class Lotto {
     }
 
     public List<Integer> getNumbers() {
-        return Collections.unmodifiableList(numbers);
+        return numbers;
     }
 
 
