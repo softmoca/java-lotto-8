@@ -1,6 +1,7 @@
 package lotto.domain;
 
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_DUPLICATION;
+import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_FORMAT;
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_NUMBER_RANGE;
 import static lotto.exception.ErrorMessage.INVALID_LOTTO_SIZE;
 
@@ -18,6 +19,23 @@ public class Lotto {
     public Lotto(List<Integer> numbers) {
         validate(numbers);
         this.numbers = numbers;
+    }
+
+    public static Lotto from(List<String> numberStrings) {
+        List<Integer> numbers = parseNumbers(numberStrings);
+        return new Lotto(numbers);
+    }
+
+    private static List<Integer> parseNumbers(List<String> numberStrings) {
+        try {
+            return numberStrings.stream()
+                    .map(Integer::parseInt)
+                    .toList();
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    INVALID_LOTTO_NUMBER_FORMAT.getMessage()
+            );
+        }
     }
 
     private void validate(List<Integer> numbers) {

@@ -6,7 +6,6 @@ import lotto.domain.Lotto;
 import lotto.domain.moeny.PurchaseAmount;
 import lotto.domain.winning.BonusNumber;
 import lotto.domain.winning.WinningNumbers;
-import lotto.util.InputParser;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -35,10 +34,7 @@ public class InputHandler {
     private Lotto inputWinningNumbersList() {
         return retryOnException(() -> {
             List<String> numberStrings = inputView.readWinningNumbers();
-            List<Integer> numbers = numberStrings.stream()
-                    .map(InputParser::parseToInteger)
-                    .toList();
-            return new Lotto(numbers);
+            return Lotto.from(numberStrings);
         });
     }
 
