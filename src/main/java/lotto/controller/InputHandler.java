@@ -45,8 +45,7 @@ public class InputHandler {
     private BonusNumber inputBonusNumber(Lotto winningNumbers) {
         return retryOnException(() -> {
             String input = inputView.readBonusNumber();
-            int value = InputParser.parseToInteger(input);
-            return BonusNumber.of(value, winningNumbers);
+            return BonusNumber.of(input, winningNumbers);
         });
     }
 

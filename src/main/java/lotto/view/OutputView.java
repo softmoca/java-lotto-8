@@ -51,6 +51,12 @@ public class OutputView {
         System.out.println(String.format(PROFIT_RATE_FORMAT, profitRate));
     }
 
+    private void printLotto(Lotto lotto) {
+        List<Integer> numbers = new ArrayList<>(lotto.getNumbers());
+        Collections.sort(numbers);
+        System.out.println(numbers);
+    }
+
     private void printRankStatistics(Rank rank, WinningStatistics statistics) {
         int count = statistics.getCountByRank(rank);
         String prizeAmount = formatPrizeAmount(rank.getPrizeAmount());
@@ -59,12 +65,6 @@ public class OutputView {
 
     private String formatPrizeAmount(int amount) {
         return NumberFormat.getNumberInstance(Locale.US).format(amount);
-    }
-
-    private void printLotto(Lotto lotto) {
-        List<Integer> numbers = new ArrayList<>(lotto.getNumbers());
-        Collections.sort(numbers);
-        System.out.println(numbers);
     }
 
 

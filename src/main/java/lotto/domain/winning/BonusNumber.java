@@ -15,10 +15,21 @@ public class BonusNumber {
         this.value = value;
     }
 
-    public static BonusNumber of(int value, Lotto winningNumbers) {
+    public static BonusNumber of(String input, Lotto winningNumbers) {
+        int value = parseValue(input);
         validateRange(value);
         validateDuplication(value, winningNumbers);
         return new BonusNumber(value);
+    }
+
+    private static int parseValue(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    BONUS_NUMBER_OUT_OF_RANGE.getMessage()
+            );
+        }
     }
 
     private static void validateRange(int value) {
