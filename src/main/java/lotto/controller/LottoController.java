@@ -18,7 +18,8 @@ public class LottoController {
     public LottoController() {
         InputView inputView = new InputView();
         this.outputView = new OutputView();
-        this.inputHandler = new InputHandler(inputView, outputView);
+        RetryHandler retryHandler = new RetryHandler(outputView);
+        this.inputHandler = new InputHandler(inputView, retryHandler);
         this.machine = new LottoMachine(new RandomLottoNumberGenerator());
     }
 
