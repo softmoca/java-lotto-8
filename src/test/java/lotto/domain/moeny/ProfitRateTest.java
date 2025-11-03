@@ -34,5 +34,5 @@ class ProfitRateTest {
         // then
         assertThat(profitRate.getValue()).isEqualTo(33.3);
     }
-    
+
 }
