@@ -29,11 +29,13 @@ public enum Rank {
                 .orElse(NONE);
     }
 
+
     private boolean matches(int count, boolean bonus) {
-        if (this == NONE) {
+        if (this.matchCount != count) {
             return false;
         }
-        return this.matchCount == count && this.requiresBonus == bonus;
+
+        return !this.requiresBonus || bonus;
     }
 
 
