@@ -3,6 +3,7 @@ package lotto.domain.machine;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 import lotto.domain.Lotto;
 import lotto.domain.moeny.PurchaseAmount;
 import lotto.domain.winning.Rank;
@@ -25,12 +26,9 @@ public class LottoMachine {
     }
 
     private List<Lotto> generateLottos(int quantity) {
-        List<Lotto> lottos = new ArrayList<>();
-        for (int i = 0; i < quantity; i++) {
-            List<Integer> numbers = numberGenerator.generate();
-            lottos.add(new Lotto(numbers));
-        }
-        return lottos;
+        return IntStream.range(0, quantity)
+                .mapToObj(i -> new Lotto(numberGenerator.generate()))
+                .toList();
     }
 
     public WinningStatistics calculateStatistics(WinningNumbers winningNumbers) {
