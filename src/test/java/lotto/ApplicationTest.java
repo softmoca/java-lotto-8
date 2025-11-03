@@ -1,13 +1,12 @@
 package lotto;
 
-import camp.nextstep.edu.missionutils.test.NsTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static camp.nextstep.edu.missionutils.test.Assertions.assertRandomUniqueNumbersInRangeTest;
 import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import camp.nextstep.edu.missionutils.test.NsTest;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class ApplicationTest extends NsTest {
     private static final String ERROR_MESSAGE = "[ERROR]";
@@ -53,6 +52,41 @@ class ApplicationTest extends NsTest {
             assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
+
+    @Test
+    void 기능_테스트2() {
+        assertRandomUniqueNumbersInRangeTest(
+                () -> {
+                    run("8000", "2,7,16,28,39,44", "18");
+                    assertThat(output()).contains(
+                            "8개를 구매했습니다.",
+                            "[13, 16, 23, 29, 39, 44]",
+                            "[2, 16, 18, 21, 28, 44]",
+                            "[2, 5, 10, 15, 17, 27]",
+                            "[5, 18, 22, 25, 35, 38]",
+                            "[2, 7, 15, 16, 18, 22]",
+                            "[15, 24, 26, 33, 39, 45]",
+                            "[16, 19, 24, 27, 29, 33]",
+                            "[3, 7, 10, 28, 37, 39]",
+                            "3개 일치 (5,000원) - 3개",
+                            "4개 일치 (50,000원) - 1개",
+                            "5개 일치 (1,500,000원) - 0개",
+                            "5개 일치, 보너스 볼 일치 (30,000,000원) - 0개",
+                            "6개 일치 (2,000,000,000원) - 0개",
+                            "총 수익률은 812.5%입니다."
+                    );
+                },
+                List.of(13, 16, 23, 29, 39, 44),
+                List.of(2, 16, 18, 21, 28, 44),
+                List.of(2, 5, 10, 15, 17, 27),
+                List.of(5, 18, 22, 25, 35, 38),
+                List.of(2, 7, 15, 16, 18, 22),
+                List.of(15, 24, 26, 33, 39, 45),
+                List.of(16, 19, 24, 27, 29, 33),
+                List.of(3, 7, 10, 28, 37, 39)
+        );
+    }
+
 
     @Override
     public void runMain() {
