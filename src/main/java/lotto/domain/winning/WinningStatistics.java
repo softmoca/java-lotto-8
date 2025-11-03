@@ -3,6 +3,8 @@ package lotto.domain.winning;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lotto.domain.moeny.ProfitRate;
+import lotto.domain.moeny.PurchaseAmount;
 
 public class WinningStatistics {
 
@@ -24,6 +26,10 @@ public class WinningStatistics {
         return new WinningStatistics(rankCounts);
     }
 
+    public ProfitRate calculateProfitRate(PurchaseAmount purchaseAmount) {
+        long totalPrize = calculateTotalPrize();
+        return ProfitRate.of(totalPrize, purchaseAmount);
+    }
 
     public int getCountByRank(Rank rank) {
         return rankCounts.getOrDefault(rank, 0);

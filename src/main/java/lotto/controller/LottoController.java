@@ -1,6 +1,5 @@
 package lotto.controller;
 
-import lotto.domain.LottoResult;
 import lotto.domain.machine.LottoMachine;
 import lotto.domain.machine.RandomLottoNumberGenerator;
 import lotto.domain.moeny.ProfitRate;
@@ -41,12 +40,11 @@ public class LottoController {
 
     private void printResult(WinningNumbers winningNumbers, PurchaseAmount purchaseAmount) {
         WinningStatistics statistics = machine.calculateStatistics(winningNumbers);
-        LottoResult result = new LottoResult(statistics, purchaseAmount);
 
         outputView.printStatisticsHeader();
-        outputView.printStatistics(result.getStatistics());
+        outputView.printStatistics(statistics);
 
-        ProfitRate profitRate = result.calculateProfitRate();
+        ProfitRate profitRate = statistics.calculateProfitRate(purchaseAmount);
         outputView.printProfitRate(profitRate.getValue());
     }
 }
