@@ -331,3 +331,104 @@
 
 ---
 
+## 🧾 로또 게임 — RDD(책임-주도 설계) 관점 정리
+
+### 1️⃣ 협력(대화) 시나리오 — 메시지 흐름
+
+### 📍 시나리오 1: 로또 구매
+
+| **송신자**             | **수신자**                  | **메시지**                               | **설명**                       |
+|---------------------|--------------------------|---------------------------------------|------------------------------|
+| 사용자                 | **InputView**            | 입력 제공                                 | 구입 금액을 입력한다.                 |
+| **LottoController** | **InputHandler**         | `inputPurchaseAmount()`               | 구입 금액 입력을 요청한다.              |
+| **InputHandler**    | **RetryHandler**         | `retryUntilValid(() -> ...)`          | 유효할 때까지 재시도 로직 실행            |
+| **InputHandler**    | **InputView**            | `readPurchaseAmount()`                | 사용자로부터 금액 문자열을 읽는다.          |
+| **InputHandler**    | **PurchaseAmount**       | `from(String input)`                  | 문자열을 구입 금액 객체로 변환 *(검증 포함)*  |
+| **PurchaseAmount**  | **PurchaseAmount**       | `parseAmount(String)` *(private)*     | 문자열을 정수로 파싱                  |
+| **PurchaseAmount**  | **PurchaseAmount**       | `validate(int)` *(private)*           | 1,000원 단위 검증, 최소 금액 검증       |
+| **LottoController** | **LottoMachine**         | `purchase(PurchaseAmount)`            | 로또 구매를 요청한다.                 |
+| **LottoMachine**    | **PurchaseAmount**       | `getLottoQuantity()`                  | 구매할 로또 개수를 조회 *(금액 / 1,000)* |
+| **LottoMachine**    | **LottoNumberGenerator** | `generate()` *(n번 반복)*                | 랜덤 번호 6개 생성 요청               |
+| **LottoMachine**    | **Lotto**                | `new Lotto(List<Integer>)` *(n번)*     | 생성된 번호로 로또 객체 생성             |
+| **Lotto**           | **Lotto**                | `validate(List<Integer>)` *(private)* | 번호 검증 *(6개, 1~45, 중복 없음)*    |
+| **LottoController** | **OutputView**           | `printPurchaseCount(int)`             | 구매한 로또 개수를 출력                |
+| **LottoController** | **OutputView**           | `printLottos(List<Lotto>)`            | 각 로또 번호를 출력                  |
+
+---
+
+### 📍 시나리오 2: 당첨 번호 입력
+
+| **송신자**             | **수신자**            | **메시지**                                  | **설명**                        |
+|---------------------|--------------------|------------------------------------------|-------------------------------|
+| **LottoController** | **InputHandler**   | `inputWinningNumbers()`                  | 당첨 번호 입력을 요청한다.               |
+| **InputHandler**    | **RetryHandler**   | `retryUntilValid(() -> ...)`             | 유효할 때까지 재시도                   |
+| **InputHandler**    | **InputView**      | `readWinningNumbers()`                   | 당첨 번호 문자열을 읽는다.               |
+| **InputView**       | **InputValidator** | `validateInput(String)`                  | 쉼표 구분자 형식 검증                  |
+| **InputView**       | **InputParser**    | `parseToStringList(String)`              | 쉼표 기준 문자열 분리                  |
+| **InputHandler**    | **Lotto**          | `from(List<String>)`                     | 문자열 리스트를 로또 객체로 변환 *(정적 팩토리)* |
+| **Lotto**           | **Lotto**          | `parseNumbers(List<String>)` *(private)* | 문자열을 정수 리스트로 파싱               |
+| **InputHandler**    | **InputView**      | `readBonusNumber()`                      | 보너스 번호 문자열을 읽는다.              |
+| **InputHandler**    | **BonusNumber**    | `of(String, Lotto)`                      | 보너스 번호 객체 생성 *(정적 팩토리)*       |
+| **BonusNumber**     | **BonusNumber**    | `parseValue(String)` *(private)*         | 문자열을 정수로 파싱                   |
+| **BonusNumber**     | **BonusNumber**    | `validateRange(int)` *(private)*         | 1~45 범위 검증                    |
+| **BonusNumber**     | **Lotto**          | `contains(int)`                          | 당첨 번호와 중복 검증                  |
+| **InputHandler**    | **WinningNumbers** | `new WinningNumbers(Lotto, BonusNumber)` | 당첨 정보 객체 생성 *(조합)*            |
+
+---
+
+### 📍 시나리오 3: 당첨 확인 및 수익률 계산
+
+| **송신자**               | **수신자**               | **메시지**                                  | **설명**                         |
+|-----------------------|-----------------------|------------------------------------------|--------------------------------|
+| **LottoController**   | **LottoMachine**      | `calculateStatistics(WinningNumbers)`    | 당첨 통계 계산 요청                    |
+| **LottoMachine**      | **WinningNumbers**    | `match(Lotto)` *(각 로또마다)*                | 구매한 로또와 당첨 번호 비교하여 등수 판정       |
+| **WinningNumbers**    | **WinningNumbers**    | `countMatches(Lotto)` *(private)*        | 일치하는 번호 개수 계산                  |
+| **WinningNumbers**    | **Lotto**             | `contains(int)` *(당첨 번호 확인용)*            | 특정 번호가 포함되어 있는지 확인             |
+| **WinningNumbers**    | **Lotto**             | `contains(int)` *(보너스 번호 확인용)*           | 보너스 번호 일치 여부 확인                |
+| **WinningNumbers**    | **Rank**              | `valueOf(int matchCount, boolean bonus)` | 일치 개수와 보너스 여부로 등수 판정           |
+| **Rank**              | **Rank**              | `matches(int, boolean)` *(private)*      | 각 Rank 상수가 조건 확인 *(다형성)*       |
+| **LottoMachine**      | **WinningStatistics** | `from(List<Rank>)`                       | Rank 리스트를 통계 객체로 변환 *(정적 팩토리)* |
+| **LottoController**   | **WinningStatistics** | `calculateProfitRate(PurchaseAmount)`    | 수익률 계산 요청 *(통계 객체가 직접 계산)*     |
+| **WinningStatistics** | **WinningStatistics** | `calculateTotalPrize()` *(private)*      | 총 당첨 금액 계산 *(내부 메서드)*          |
+| **WinningStatistics** | **Rank**              | `getPrizeAmount()` *(각 등수마다)*            | 등수별 상금 조회                      |
+| **WinningStatistics** | **ProfitRate**        | `of(long totalPrize, PurchaseAmount)`    | 수익률 객체 생성 *(정적 팩토리)*           |
+| **ProfitRate**        | **PurchaseAmount**    | `getAmount()`                            | 구입 금액 조회                       |
+| **LottoController**   | **OutputView**        | `printStatisticsHeader()`                | 통계 헤더 출력                       |
+| **LottoController**   | **OutputView**        | `printStatistics(WinningStatistics)`     | 등수별 당첨 내역 출력                   |
+| **OutputView**        | **WinningStatistics** | `getCountByRank(Rank)` *(각 등수마다)*        | 등수별 당첨 개수 조회                   |
+| **OutputView**        | **Rank**              | `getDescription()`, `getPrizeAmount()`   | 등수 설명과 상금 조회                   |
+| **LottoController**   | **OutputView**        | `printProfitRate(double)`                | 수익률 출력                         |
+
+> 💡 협력은 요청–응답 메시지로 표현되며, 메시지가 인터페이스를 결정한다.
+>
+>
+> 각 객체는 자율적으로 내부 메서드를 선택하여 행동한다 (**캡슐화**).
+>
+
+---
+
+### 2️⃣ 🧩 역할 · 책임 · 메시지 (Role–Responsibility–Message)
+
+| **역할(Role)**                   | **책임(Responsibility)**                          | **공개 메시지(Interface)**                                                                                                                                                                |
+|--------------------------------|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Application**                | 프로그램 진입점                                        | `void main(String[])`                                                                                                                                                                |
+| **LottoController**            | 게임 전체 흐름 제어 *(입력 → 구매 → 당첨 확인 → 결과 출력)*         | `void run()`                                                                                                                                                                         |
+| **InputHandler**               | 입력 처리 오케스트레이션 *(재시도 포함)*                        | `PurchaseAmount inputPurchaseAmount()`<br>`WinningNumbers inputWinningNumbers()`                                                                                                     |
+| **RetryHandler**               | 예외 발생 시 재입력 처리                                  | `<T> T retryUntilValid(Supplier<T>)`                                                                                                                                                 |
+| **InputView**                  | 사용자 입력 수집                                       | `String readPurchaseAmount()`<br>`List<String> readWinningNumbers()`<br>`String readBonusNumber()`                                                                                   |
+| **OutputView**                 | 결과 및 통계 출력                                      | `void printPurchaseCount(int)`<br>`void printLottos(List<Lotto>)`<br>`void printStatistics(WinningStatistics)`<br>`void printProfitRate(double)`<br>`void printErrorMessage(String)` |
+| **LottoMachine**               | 로또 구매 및 당첨 통계 계산                                | `void purchase(PurchaseAmount)`<br>`WinningStatistics calculateStatistics(WinningNumbers)`<br>`List<Lotto> getPurchasedLottos()`<br>`int getPurchasedCount()`                        |
+| **LottoNumberGenerator**       | 로또 번호 생성 전략 *(인터페이스)*                           | `List<Integer> generate()`                                                                                                                                                           |
+| **RandomLottoNumberGenerator** | 랜덤 번호 생성 구현체                                    | `List<Integer> generate()`                                                                                                                                                           |
+| **Lotto**                      | 로또 번호 6개 관리 *(일급 컬렉션)*<br>번호 검증 및 포함 여부 확인      | `static Lotto from(List<String>)`<br>`List<Integer> getNumbers()`<br>`boolean contains(int)`                                                                                         |
+| **PurchaseAmount**             | 구입 금액 관리 *(원시값 포장)*<br>금액 검증 및 로또 개수 계산         | `static PurchaseAmount from(String)`<br>`int getLottoQuantity()`<br>`int getAmount()`                                                                                                |
+| **WinningNumbers**             | 당첨 번호 + 보너스 번호 관리 *(조합)*<br>등수 판정               | `Rank match(Lotto purchasedLotto)`                                                                                                                                                   |
+| **BonusNumber**                | 보너스 번호 관리 *(원시값 포장)*<br>범위 검증 및 중복 검증           | `static BonusNumber of(String, Lotto)`<br>`int getValue()`                                                                                                                           |
+| **Rank**                       | 등수 정보 관리 *(Enum)*<br>등수 판정 및 상금 조회              | `static Rank valueOf(int matchCount, boolean hasBonus)`<br>`int getPrizeAmount()`<br>`String getDescription()`<br>`boolean isWinning()`                                              |
+| **WinningStatistics**          | 당첨 통계 관리 *(일급 컬렉션)*<br>총 당첨 금액 계산<br>**수익률 계산** | `static WinningStatistics from(List<Rank>)`<br>`int getCountByRank(Rank)`<br>`long calculateTotalPrize()`<br>**`ProfitRate calculateProfitRate(PurchaseAmount)`**                    |
+| **ProfitRate**                 | 수익률 관리 *(원시값 포장)*<br>수익률 계산 및 반올림               | `static ProfitRate of(long totalPrize, PurchaseAmount)`<br>`double getValue()`                                                                                                       |
+| **InputValidator**             | 입력 문자열 형식 검증 *(쉼표 구분자 등)*                       | `static void validateInput(String)`                                                                                                                                                  |
+| **InputParser**                | 입력 문자열 파싱 *(쉼표 기준 분리)*                          | `static List<String> parseToStringList(String)`                                                                                                                                      |
+| **ErrorMessage**               | 에러 메시지 중앙 관리 *(Enum)*                           | `String getMessage()`                                                                                                                                                                |
+
+
