@@ -80,3 +80,41 @@
 - 판단한다 (당첨 정보가 등수를)
 - 계산한다 (당첨 통계가 수익률을)
 
+## 시나리오 메시지 중심으로 재검토
+
+### 시나리오 1: 로또 구입
+
+사용자: "8000원 이요 !"   
+→ 시스템: "몇 장?" 계산 필요     
+→ LottoMachine: "8장 발행해"    
+→ 각 Lotto: "6개 번호 뽑아"   
+→ LottoNumber: "유효한 번호야?"
+
+메시지:
+
+- calculateCount(money) → 장수 계산
+- issue(count) → 발행
+- pickNumbers() → 번호 뽑기
+- validate(number) → 검증
+
+### 시나리오 2: 당첨 확인
+
+사용자: "당첨 번호는 1,2,3,4,5,6"   
+사용자: "보너스는 7"   
+→ WinningLotto: "저장해"       
+→ 각 Lotto: "당첨 번호와 비교해"     
+→ Lotto: "몇 개 일치?" → matchCount()       
+→ Lotto: "보너스 있어?" → hasBonus()     
+→ WinningLotto: "등수 판단해" → determineRank()
+
+메시지:
+
+- match(winningLotto) → 비교
+- countMatches(numbers) → 일치 개수
+- hasBonus(bonus) → 보너스 여부
+- determineRank(matchCount, hasBonus) → 등수 판단
+
+
+
+
+
