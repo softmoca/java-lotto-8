@@ -12,4 +12,12 @@ class LottoNumberTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("1부터 45");
     }
+
+    @Test
+    void 로또_번호는_45보다_클_수_없다() {
+        assertThatThrownBy(() -> new LottoNumber(46))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("1부터 45");
+    }
+
 }
