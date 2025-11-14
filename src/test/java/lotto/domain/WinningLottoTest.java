@@ -26,4 +26,17 @@ class WinningLottoTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("중복");
     }
+
+    @Test
+    void 보너스_번호는_1부터_45_사이여야_한다() {
+        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
+
+        assertThatThrownBy(() -> new WinningLotto(winningNumbers, 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("1부터 45");
+
+        assertThatThrownBy(() -> new WinningLotto(winningNumbers, 46))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("1부터 45");
+    }
 }
