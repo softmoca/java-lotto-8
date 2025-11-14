@@ -1,19 +1,22 @@
 package lotto.domain;
 
 
-import java.util.List;
-
 public class WinningLotto {
     private final Lotto winningNumbers;
     private final LottoNumber bonusNumber;
 
-    public WinningLotto(List<Integer> winningNumbers, int bonusNumber) {
-        this.winningNumbers = new Lotto(winningNumbers);
-        this.bonusNumber = new LottoNumber(bonusNumber);
-        validateBonusNotDuplicate();
+    private WinningLotto(Lotto winningNumbers, LottoNumber bonusNumber) {
+        this.winningNumbers = winningNumbers;
+        this.bonusNumber = bonusNumber;
     }
 
-    private void validateBonusNotDuplicate() {
+
+    public static WinningLotto of(Lotto winningNumbers, LottoNumber bonusNumber) {
+        validateBonusNotDuplicate(winningNumbers, bonusNumber);
+        return new WinningLotto(winningNumbers, bonusNumber);
+    }
+
+    private static void validateBonusNotDuplicate(Lotto winningNumbers, LottoNumber bonusNumber) {
         if (winningNumbers.containsBonus(bonusNumber.getNumber())) {
             throw new IllegalArgumentException(
                     "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다."
