@@ -37,9 +37,12 @@ public class Lotto {
     }
 
     public int countMatches(List<Integer> winningNumbers) {
+        List<LottoNumber> winningLottoNumbers = winningNumbers.stream()
+                .map(LottoNumber::new)
+                .toList();
+
         return (int) numbers.stream()
-                .map(LottoNumber::getNumber)
-                .filter(winningNumbers::contains)
+                .filter(winningLottoNumbers::contains)
                 .count();
     }
 
