@@ -22,6 +22,12 @@ public class LottoMachine {
     }
 
     private void validatePurchaseAmount(int purchaseAmount) {
+        if (purchaseAmount <= 0) {
+            throw new IllegalArgumentException(
+                    "[ERROR] 구입 금액은 양수여야 합니다."
+            );
+        }
+
         if (purchaseAmount % LOTTO_PRICE != 0) {
             throw new IllegalArgumentException(
                     "[ERROR] 구입 금액은 1,000원 단위여야 합니다."
