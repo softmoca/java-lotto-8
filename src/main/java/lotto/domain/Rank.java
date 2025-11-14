@@ -1,5 +1,7 @@
 package lotto.domain;
 
+import java.util.Optional;
+
 public enum Rank {
     FIRST,
     SECOND,
@@ -7,22 +9,22 @@ public enum Rank {
     FOURTH,
     FIFTH;
 
-    public static Rank of(int matchCount, boolean hasBonus) {
+    public static Optional<Rank> of(int matchCount, boolean hasBonus) {
         if (matchCount == 6) {
-            return FIRST;
+            return Optional.of(FIRST);
         }
         if (matchCount == 5 && hasBonus) {
-            return SECOND;
+            return Optional.of(SECOND);
         }
         if (matchCount == 5) {
-            return THIRD;
+            return Optional.of(THIRD);
         }
         if (matchCount == 4) {
-            return FOURTH;
+            return Optional.of(FOURTH);
         }
         if (matchCount == 3) {
-            return FIFTH;
+            return Optional.of(FIFTH);
         }
-        return null;
+        return Optional.empty();
     }
 }
