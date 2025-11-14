@@ -28,4 +28,8 @@ public class LottoStatistics {
                 .sum();
     }
 
+    public double getProfitRate() {
+        return (double) getTotalPrize() / purchaseAmount * 100;
+    }
+
 }
