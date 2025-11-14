@@ -39,5 +39,14 @@ class RankTest {
         assertThat(rank).isEqualTo(Rank.FIFTH);
     }
 
+    @Test
+    void _2개_이하는_낙첨이다() {
+        Rank rank = Rank.of(2, false);
+        assertThat(rank).isNull();
+
+        rank = Rank.of(0, false);
+        assertThat(rank).isNull();
+    }
+
 
 }
