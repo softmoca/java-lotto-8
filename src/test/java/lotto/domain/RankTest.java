@@ -27,5 +27,17 @@ class RankTest {
         assertThat(rank).isEqualTo(Rank.THIRD);
     }
 
+    @Test
+    void _4개_일치하면_4등이다() {
+        Rank rank = Rank.of(4, false);
+        assertThat(rank).isEqualTo(Rank.FOURTH);
+    }
+
+    @Test
+    void _3개_일치하면_5등이다() {
+        Rank rank = Rank.of(3, false);
+        assertThat(rank).isEqualTo(Rank.FIFTH);
+    }
+
 
 }
