@@ -20,4 +20,16 @@ public class LottoStatistics {
     public int getCount(Rank rank) {
         return statistics.getOrDefault(rank, 0);
     }
+
+    public int getTotalPrize() {
+        int total = 0;
+        for (Map.Entry<Rank, Integer> entry : statistics.entrySet()) {
+            Rank rank = entry.getKey();
+            int count = entry.getValue();
+            total += rank.getPrizeMoney() * count;
+        }
+
+        return total;
+    }
+
 }
