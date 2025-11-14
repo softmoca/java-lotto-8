@@ -22,14 +22,10 @@ public class LottoStatistics {
     }
 
     public int getTotalPrize() {
-        int total = 0;
-        for (Map.Entry<Rank, Integer> entry : statistics.entrySet()) {
-            Rank rank = entry.getKey();
-            int count = entry.getValue();
-            total += rank.getPrizeMoney() * count;
-        }
-
-        return total;
+        return statistics.entrySet().stream()
+                .mapToInt(entry ->
+                        entry.getKey().getPrizeMoney() * entry.getValue())
+                .sum();
     }
 
 }
