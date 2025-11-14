@@ -42,6 +42,14 @@ class LottoTest {
         assertThat(matchCount).isEqualTo(3);
     }
 
+    @Test
+    void 보너스_번호_포함_여부를_확인한다() {
+        Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+
+        assertThat(lotto.containsBonus(7)).isFalse();
+        assertThat(lotto.containsBonus(6)).isTrue();
+    }
+
 
 }
 
