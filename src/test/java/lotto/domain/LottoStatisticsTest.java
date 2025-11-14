@@ -62,4 +62,15 @@ class LottoStatisticsTest {
         assertThat(statistics.getProfitRate()).isEqualTo(62.5);
     }
 
+    @Test
+    void 수익률은_소수점_둘째_자리에서_반올림한다() {
+        LottoStatistics statistics = new LottoStatistics(14000);
+
+        statistics.add(Rank.FIRST);
+
+        //"2,000,000,000 / 14,000 * 100 = 14285714.285714..."
+        assertThat(statistics.getProfitRate()).isEqualTo(14285714.3);
+    }
+
+
 }
