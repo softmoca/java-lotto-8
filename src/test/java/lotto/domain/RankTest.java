@@ -11,33 +11,38 @@ class RankTest {
     void _6개_일치하면_1등이다() {
         Optional<Rank> rank = Rank.of(6, false);
 
-        assertThat(rank).isEqualTo(Rank.FIRST);
+        assertThat(rank).isPresent();
+        assertThat(rank.get()).isEqualTo(Rank.FIRST);
     }
 
     @Test
     void _5개_일치하고_보너스_일치하면_2등이다() {
         Optional<Rank> rank = Rank.of(5, true);
 
-        assertThat(rank).isEqualTo(Rank.SECOND);
+        assertThat(rank).isPresent();
+        assertThat(rank.get()).isEqualTo(Rank.SECOND);
     }
 
     @Test
     void _5개_일치하고_보너스_불일치하면_3등이다() {
         Optional<Rank> rank = Rank.of(5, false);
 
-        assertThat(rank).isEqualTo(Rank.THIRD);
+        assertThat(rank).isPresent();
+        assertThat(rank.get()).isEqualTo(Rank.THIRD);
     }
 
     @Test
     void _4개_일치하면_4등이다() {
         Optional<Rank> rank = Rank.of(4, false);
-        assertThat(rank).isEqualTo(Rank.FOURTH);
+        assertThat(rank).isPresent();
+        assertThat(rank.get()).isEqualTo(Rank.FOURTH);
     }
 
     @Test
     void _3개_일치하면_5등이다() {
         Optional<Rank> rank = Rank.of(3, false);
-        assertThat(rank).isEqualTo(Rank.FIFTH);
+        assertThat(rank).isPresent();
+        assertThat(rank.get()).isEqualTo(Rank.FIFTH);
     }
 
     @Test
