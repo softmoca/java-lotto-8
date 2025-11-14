@@ -20,4 +20,11 @@ public class WinningLotto {
             );
         }
     }
+
+    public Rank match(Lotto lotto) {
+        int matchCount = lotto.countMatches(winningNumbers.getNumbers());
+        boolean hasBonus = lotto.containsBonus(bonusNumber.getNumber());
+        return Rank.of(matchCount, hasBonus);
+    }
+
 }
