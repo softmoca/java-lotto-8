@@ -1,5 +1,6 @@
 package lotto.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -39,4 +40,19 @@ class WinningLottoTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("1부터 45");
     }
+
+
+    @Test
+    void 로또와_비교하여_등수를_판단한다_1등() {
+        WinningLotto winning = new WinningLotto(
+                List.of(1, 2, 3, 4, 5, 6), 7
+        );
+        Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+
+        Rank rank = winning.match(lotto);
+
+        assertThat(rank).isEqualTo(Rank.FIRST);
+    }
+
+
 }
