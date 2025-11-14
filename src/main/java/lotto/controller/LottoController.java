@@ -3,7 +3,9 @@ package lotto.controller;
 import java.util.List;
 import lotto.domain.Lotto;
 import lotto.domain.LottoMachine;
+import lotto.domain.LottoNumber;
 import lotto.domain.LottoStatistics;
+import lotto.domain.Money;
 import lotto.domain.Rank;
 import lotto.domain.WinningLotto;
 import lotto.view.InputView;
@@ -22,67 +24,67 @@ public class LottoController {
 
     public void run() {
         // 1. 로또 구입
-        int purchaseAmount = readPurchaseAmountWithRetry();
+        Money purchaseAmount = readPurchaseAmountWithRetry();
         List<Lotto> lottos = issueLottos(purchaseAmount);
 
         // 2. 당첨 번호 입력
         WinningLotto winningLotto = createWinningLottoWithRetry();
 
         // 3. 당첨 확인 및 출력
-        checkAndPrintResult(lottos, winningLotto, purchaseAmount);
+        checkAndPrintResult(lottos, winningLotto, 1000);
     }
 
-    private int readPurchaseAmountWithRetry() {
+    private Money readPurchaseAmountWithRetry() {
         while (true) {
             try {
-                return inputView.readPurchaseAmount();
+                int amount = inputView.readPurchaseAmount();
+                return Money.from(amount);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
     }
 
-    private List<Lotto> issueLottos(int purchaseAmount) {
-        try {
-            List<Lotto> lottos = lottoMachine.issue(purchaseAmount);
-            outputView.printPurchaseCount(lottos.size());
-            outputView.printLottos(lottos);
-            return lottos;
-        } catch (IllegalArgumentException e) {
-            outputView.printErrorMessage(e.getMessage());
-            int retryAmount = readPurchaseAmountWithRetry();
-            return issueLottos(retryAmount);
-        }
+    private List<Lotto> issueLottos(Money purchaseAmount) {
+
+        List<Lotto> lottos = lottoMachine.issue(purchaseAmount);
+        outputView.printPurchaseCount(lottos.size());
+        outputView.printLottos(lottos);
+        return lottos;
+
     }
+
 
     private WinningLotto createWinningLottoWithRetry() {
-        while (true) {
-            try {
-                List<Integer> winningNumbers = readWinningNumbersWithRetry();
-                int bonusNumber = readBonusNumberWithRetry();
-                return new WinningLotto(winningNumbers, bonusNumber);
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
+        Lotto winningNumbers = readWinningNumbersWithRetry();
+        LottoNumber bonusNumber = readBonusNumberWithRetry(winningNumbers);
+        return WinningLotto.of(winningNumbers, bonusNumber);
     }
 
-    private List<Integer> readWinningNumbersWithRetry() {
+    private Lotto readWinningNumbersWithRetry() {
         while (true) {
             try {
                 List<Integer> numbers = inputView.readWinningNumbers();
-                new Lotto(numbers);
-                return numbers;
+                return new Lotto(numbers);
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
     }
 
-    private int readBonusNumberWithRetry() {
+    private LottoNumber readBonusNumberWithRetry(Lotto winningNumbers) {
         while (true) {
             try {
-                return inputView.readBonusNumber();
+                int number = inputView.readBonusNumber();
+                LottoNumber bonusNumber = new LottoNumber(number);
+
+                if (winningNumbers.containsBonus(bonusNumber.getNumber())) {
+                    throw new IllegalArgumentException(
+                            "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다."
+                    );
+                }
+
+                return bonusNumber;
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
             }

@@ -8,45 +8,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class WinningLottoTest {
-
-    @Test
-    void 당첨_번호를_생성한다() {
-        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
-        int bonusNumber = 7;
-
-        assertThatCode(() -> new WinningLotto(winningNumbers, bonusNumber))
-                .doesNotThrowAnyException();
-    }
-
-    @Test
-    void 보너스_번호가_당첨_번호와_중복되면_예외() {
-        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
-        int bonusNumber = 6;
-
-        assertThatThrownBy(() -> new WinningLotto(winningNumbers, bonusNumber))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("중복");
-    }
-
-    @Test
-    void 보너스_번호는_1부터_45_사이여야_한다() {
-        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
-
-        assertThatThrownBy(() -> new WinningLotto(winningNumbers, 0))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("1부터 45");
-
-        assertThatThrownBy(() -> new WinningLotto(winningNumbers, 46))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("1부터 45");
-    }
-
-
+    
     @Test
     void 로또와_비교하여_등수를_판단한다_1등() {
-        WinningLotto winning = new WinningLotto(
-                List.of(1, 2, 3, 4, 5, 6), 7
-        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(7);
+
+        WinningLotto winning = WinningLotto.of(winningNumbers, bonusNumber);
         Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 6));
 
         Rank rank = winning.match(lotto);
@@ -56,9 +24,10 @@ class WinningLottoTest {
 
     @Test
     void 로또와_비교하여_등수를_판단한다_2등() {
-        WinningLotto winning = new WinningLotto(
-                List.of(1, 2, 3, 4, 5, 6), 7
-        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(7);
+
+        WinningLotto winning = WinningLotto.of(winningNumbers, bonusNumber);
         Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 7));
 
         Rank rank = winning.match(lotto);
@@ -68,9 +37,10 @@ class WinningLottoTest {
 
     @Test
     void 로또와_비교하여_등수를_판단한다_3등() {
-        WinningLotto winning = new WinningLotto(
-                List.of(1, 2, 3, 4, 5, 6), 7
-        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(7);
+
+        WinningLotto winning = WinningLotto.of(winningNumbers, bonusNumber);
         Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 8));
 
         Rank rank = winning.match(lotto);
@@ -80,9 +50,11 @@ class WinningLottoTest {
 
     @Test
     void 로또와_비교하여_등수를_판단한다_낙첨() {
-        WinningLotto winning = new WinningLotto(
-                List.of(1, 2, 3, 4, 5, 6), 7
-        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(7);
+
+        WinningLotto winning = WinningLotto.of(winningNumbers, bonusNumber);
+
         Lotto lotto = new Lotto(List.of(1, 2, 8, 9, 10, 11));
 
         Rank rank = winning.match(lotto);
@@ -103,7 +75,7 @@ class WinningLottoTest {
     @Test
     void 정적_팩토리에서_보너스가_당첨_번호와_중복되면_예외() {
         Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
-        LottoNumber bonusNumber = new LottoNumber(6);  // 중복!
+        LottoNumber bonusNumber = new LottoNumber(6);
 
         assertThatThrownBy(() -> WinningLotto.of(winningNumbers, bonusNumber))
                 .isInstanceOf(IllegalArgumentException.class)
