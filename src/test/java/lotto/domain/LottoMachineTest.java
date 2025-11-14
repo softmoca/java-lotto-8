@@ -2,10 +2,11 @@ package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class LottoMachineTest {
 
@@ -15,33 +16,20 @@ class LottoMachineTest {
                 .doesNotThrowAnyException();
     }
 
-    @Test
-    void 천원_단위가_아니면_예외() {
+    @ParameterizedTest(name = "{0}원 -> {1}장")
+    @CsvSource({
+            "1000, 1",
+            "2000, 2",
+            "5000, 5",
+            "10000, 10"
+    })
+    void 다양한_구입_금액으로_로또를_발행한다(int amount, int expectedCount) {
         LottoMachine machine = new LottoMachine();
+        Money money = Money.from(amount);
 
-        assertThatThrownBy(() -> machine.issue(1500))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("1,000원 단위");
-    }
+        List<Lotto> lottos = machine.issue(money);
 
-    @Test
-    void 구입_금액만큼_로또를_발행한다() {
-        LottoMachine machine = new LottoMachine();
-
-        List<Lotto> lottos = machine.issue(8000);
-
-        assertThat(lottos).hasSize(8);
-    }
-
-    @Test
-    void 구입_금액은_양수여야_한다() {
-        LottoMachine machine = new LottoMachine();
-
-        assertThatThrownBy(() -> machine.issue(-1000))
-                .isInstanceOf(IllegalArgumentException.class);
-
-        assertThatThrownBy(() -> machine.issue(0))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThat(lottos).hasSize(expectedCount);
     }
 
 

@@ -10,7 +10,7 @@ public class InputView {
     public int readPurchaseAmount() {
         System.out.println("구입금액을 입력해 주세요.");
         String input = Console.readLine();
-        return parsePositiveInteger(input);
+        return parseInteger(input);
     }
 
     public List<Integer> readWinningNumbers() {
@@ -24,10 +24,10 @@ public class InputView {
         System.out.println();
         System.out.println("보너스 번호를 입력해 주세요.");
         String input = Console.readLine();
-        return parsePositiveInteger(input);
+        return parseInteger(input);
     }
 
-    private int parsePositiveInteger(String input) {
+    private int parseInteger(String input) {
         try {
             return Integer.parseInt(input.trim());
         } catch (NumberFormatException e) {
@@ -40,7 +40,7 @@ public class InputView {
         List<Integer> numbers = new ArrayList<>();
 
         for (String token : tokens) {
-            numbers.add(parsePositiveInteger(token));
+            numbers.add(parseInteger(token));
         }
 
         return numbers;

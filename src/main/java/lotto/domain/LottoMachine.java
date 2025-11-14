@@ -9,9 +9,9 @@ public class LottoMachine {
     public LottoMachine() {
     }
 
-    public List<Lotto> issue(int purchaseAmount) {
-        validatePurchaseAmount(purchaseAmount);
-        int count = calculateLottoCount(purchaseAmount);
+    public List<Lotto> issue(Money purchaseAmount) {
+
+        int count = calculateLottoCount(purchaseAmount.getAmount());
         return createLottos(count);
     }
 
@@ -25,19 +25,6 @@ public class LottoMachine {
                 .toList();
     }
 
-    private void validatePurchaseAmount(int purchaseAmount) {
-        if (purchaseAmount <= 0) {
-            throw new IllegalArgumentException(
-                    "[ERROR] 구입 금액은 양수여야 합니다."
-            );
-        }
-
-        if (purchaseAmount % LOTTO_PRICE != 0) {
-            throw new IllegalArgumentException(
-                    "[ERROR] 구입 금액은 1,000원 단위여야 합니다."
-            );
-        }
-    }
 
     private Lotto createLotto() {
         List<Integer> numbers = Randoms.pickUniqueNumbersInRange(1, 45, 6);
