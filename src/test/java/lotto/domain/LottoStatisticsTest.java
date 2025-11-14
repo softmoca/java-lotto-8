@@ -53,5 +53,13 @@ class LottoStatisticsTest {
         assertThat(statistics.getTotalPrize()).isEqualTo(55_000);
     }
 
+    @Test
+    void 수익률을_계산한다() {
+        LottoStatistics statistics = new LottoStatistics(8000);
+
+        statistics.add(Rank.FIFTH);
+
+        assertThat(statistics.getProfitRate()).isEqualTo(62.5);
+    }
 
 }
