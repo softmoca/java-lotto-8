@@ -54,5 +54,41 @@ class WinningLottoTest {
         assertThat(rank).isEqualTo(Rank.FIRST);
     }
 
+    @Test
+    void 로또와_비교하여_등수를_판단한다_2등() {
+        WinningLotto winning = new WinningLotto(
+                List.of(1, 2, 3, 4, 5, 6), 7
+        );
+        Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 7));
+
+        Rank rank = winning.match(lotto);
+
+        assertThat(rank).isEqualTo(Rank.SECOND);
+    }
+
+    @Test
+    void 로또와_비교하여_등수를_판단한다_3등() {
+        WinningLotto winning = new WinningLotto(
+                List.of(1, 2, 3, 4, 5, 6), 7
+        );
+        Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 8));
+
+        Rank rank = winning.match(lotto);
+
+        assertThat(rank).isEqualTo(Rank.THIRD);
+    }
+
+    @Test
+    void 로또와_비교하여_등수를_판단한다_낙첨() {
+        WinningLotto winning = new WinningLotto(
+                List.of(1, 2, 3, 4, 5, 6), 7
+        );
+        Lotto lotto = new Lotto(List.of(1, 2, 8, 9, 10, 11));
+
+        Rank rank = winning.match(lotto);
+
+        assertThat(rank).isEqualTo(Rank.NONE);
+    }
+
 
 }
