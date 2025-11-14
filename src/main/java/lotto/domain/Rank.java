@@ -17,6 +17,12 @@ public enum Rank {
         if (matchCount == 5) {
             return THIRD;
         }
-        return FIRST;
+        if (matchCount == 4) {
+            return FOURTH;
+        }
+        if (matchCount == 3) {
+            return FIFTH;
+        }
+        return null;
     }
 }
