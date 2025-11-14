@@ -47,4 +47,9 @@ public enum Rank {
         return true;
     }
 
+    public boolean isWinning() {
+        return this != NONE;
+    }
+
+
 }
