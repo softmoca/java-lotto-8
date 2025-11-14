@@ -91,4 +91,23 @@ class WinningLottoTest {
     }
 
 
+    @Test
+    void 정적_팩토리로_당첨_번호를_생성한다() {
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(7);
+
+        assertThatCode(() -> WinningLotto.of(winningNumbers, bonusNumber))
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void 정적_팩토리에서_보너스가_당첨_번호와_중복되면_예외() {
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        LottoNumber bonusNumber = new LottoNumber(6);  // 중복!
+
+        assertThatThrownBy(() -> WinningLotto.of(winningNumbers, bonusNumber))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("중복");
+    }
+
 }
