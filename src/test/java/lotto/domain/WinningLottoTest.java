@@ -1,6 +1,7 @@
 package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -16,5 +17,13 @@ class WinningLottoTest {
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void 보너스_번호가_당첨_번호와_중복되면_예외() {
+        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
+        int bonusNumber = 6;
 
+        assertThatThrownBy(() -> new WinningLotto(winningNumbers, bonusNumber))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("중복");
+    }
 }
