@@ -1,8 +1,10 @@
 package lotto.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class LottoMachineTest {
@@ -21,4 +23,14 @@ class LottoMachineTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("1,000원 단위");
     }
+
+    @Test
+    void 구입_금액만큼_로또를_발행한다() {
+        LottoMachine machine = new LottoMachine();
+
+        List<Lotto> lottos = machine.issue(8000);
+
+        assertThat(lottos).hasSize(8);
+    }
+
 }
