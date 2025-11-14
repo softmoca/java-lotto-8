@@ -33,4 +33,16 @@ class LottoMachineTest {
         assertThat(lottos).hasSize(8);
     }
 
+    @Test
+    void 구입_금액은_양수여야_한다() {
+        LottoMachine machine = new LottoMachine();
+
+        assertThatThrownBy(() -> machine.issue(-1000))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThatThrownBy(() -> machine.issue(0))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+
 }
