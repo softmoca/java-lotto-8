@@ -72,5 +72,25 @@ class LottoStatisticsTest {
         assertThat(statistics.getProfitRate()).isEqualTo(14285714.3);
     }
 
+    @Test
+    void 수익률_계산_예시() {
+        // 예시 1: 100% 수익률
+        LottoStatistics statistics1 = new LottoStatistics(5000);
+        statistics1.add(Rank.FIFTH);
+        assertThat(statistics1.getProfitRate()).isEqualTo(100.0);
+
+        // 예시 2: 50% 수익률
+        LottoStatistics statistics2 = new LottoStatistics(10000);
+        statistics2.add(Rank.FIFTH);
+        assertThat(statistics2.getProfitRate()).isEqualTo(50.0);
+
+        // 예시 3: 0% 수익률 (전부 낙첨)
+        LottoStatistics statistics3 = new LottoStatistics(8000);
+        statistics3.add(Rank.NONE);
+        statistics3.add(Rank.NONE);
+        statistics3.add(Rank.NONE);
+        assertThat(statistics3.getProfitRate()).isEqualTo(0.0);
+    }
+
 
 }
