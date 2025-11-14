@@ -2,88 +2,49 @@ package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class RankTest {
 
-    @Test
-    void _6개_일치하면_1등이다() {
-        Optional<Rank> rank = Rank.of(6, false);
-
-        assertThat(rank).isPresent();
-        assertThat(rank.get()).isEqualTo(Rank.FIRST);
+    @ParameterizedTest(name = "{0}개 일치, 보너스보너스 {1} -> {2}")
+    @CsvSource({
+            "6, false, FIRST",
+            "6, true, FIRST",
+            "5, true, SECOND",
+            "5, false, THIRD",
+            "4, false, FOURTH",
+            "4, true, FOURTH",
+            "3, false, FIFTH"
+    })
+    void 일치_개수와_보너스_여부로_등수를_판단한다(
+            int matchCount,
+            boolean hasBonus,
+            Rank expected
+    ) {
+        assertThat(Rank.of(matchCount, hasBonus)).contains(expected);
     }
 
-    @Test
-    void _5개_일치하고_보너스_일치하면_2등이다() {
-        Optional<Rank> rank = Rank.of(5, true);
-
-        assertThat(rank).isPresent();
-        assertThat(rank.get()).isEqualTo(Rank.SECOND);
-    }
-
-    @Test
-    void _5개_일치하고_보너스_불일치하면_3등이다() {
-        Optional<Rank> rank = Rank.of(5, false);
-
-        assertThat(rank).isPresent();
-        assertThat(rank.get()).isEqualTo(Rank.THIRD);
-    }
-
-    @Test
-    void _4개_일치하면_4등이다() {
-        Optional<Rank> rank = Rank.of(4, false);
-        assertThat(rank).isPresent();
-        assertThat(rank.get()).isEqualTo(Rank.FOURTH);
-    }
-
-    @Test
-    void _3개_일치하면_5등이다() {
-        Optional<Rank> rank = Rank.of(3, false);
-        assertThat(rank).isPresent();
-        assertThat(rank.get()).isEqualTo(Rank.FIFTH);
-    }
-
-    @Test
-    void _2개_이하는_낙첨이다() {
-        Optional<Rank> rank = Rank.of(2, false);
-        assertThat(rank).isEmpty();
-
-        rank = Rank.of(0, false);
-        assertThat(rank).isEmpty();
+    @ParameterizedTest(name = "{0}개 일치 -> 낙첨")
+    @ValueSource(ints = {0, 1, 2})
+    void 일치_개수가_3개_미만이면_낙첨이다(int matchCount) {
+        assertThat(Rank.of(matchCount, false)).isEmpty();
     }
 
     @Test
     void 각_등수는_상금을_갖는다() {
-        Rank first = Rank.of(6, false).get();
-        assertThat(first.getPrizeMoney()).isEqualTo(2_000_000_000);
-
-        Rank second = Rank.of(5, true).get();
-        assertThat(second.getPrizeMoney()).isEqualTo(30_000_000);
-
-        Rank fifth = Rank.of(3, false).get();
-        assertThat(fifth.getPrizeMoney()).isEqualTo(5_000);
+        assertThat(Rank.FIRST.getPrizeMoney()).isEqualTo(2_000_000_000);
+        assertThat(Rank.SECOND.getPrizeMoney()).isEqualTo(30_000_000);
+        assertThat(Rank.THIRD.getPrizeMoney()).isEqualTo(1_500_000);
+        assertThat(Rank.FOURTH.getPrizeMoney()).isEqualTo(50_000);
+        assertThat(Rank.FIFTH.getPrizeMoney()).isEqualTo(5_000);
     }
 
     @Test
-    void 모든_경우의_수를_테스트한다() {
-        assertThat(Rank.of(6, false).get()).isEqualTo(Rank.FIRST);
-        assertThat(Rank.of(6, true).get()).isEqualTo(Rank.FIRST);
-
-        assertThat(Rank.of(5, true).get()).isEqualTo(Rank.SECOND);
-
-        assertThat(Rank.of(5, false).get()).isEqualTo(Rank.THIRD);
-
-        assertThat(Rank.of(4, false).get()).isEqualTo(Rank.FOURTH);
-        assertThat(Rank.of(4, true).get()).isEqualTo(Rank.FOURTH);
-
-        assertThat(Rank.of(3, false).get()).isEqualTo(Rank.FIFTH);
-
-        assertThat(Rank.of(2, false)).isEmpty();
-        assertThat(Rank.of(1, false)).isEmpty();
-        assertThat(Rank.of(0, false)).isEmpty();
+    void _5개_일치_시_보너스가_등수를_결정한다() {
+        assertThat(Rank.of(5, true)).contains(Rank.SECOND);
+        assertThat(Rank.of(5, false)).contains(Rank.THIRD);
     }
-
-
 }
