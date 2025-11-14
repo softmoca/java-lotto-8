@@ -1,7 +1,6 @@
 package lotto.domain;
 
 import camp.nextstep.edu.missionutils.Randoms;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LottoMachine {
@@ -21,11 +20,9 @@ public class LottoMachine {
     }
 
     private List<Lotto> createLottos(int count) {
-        List<Lotto> lottos = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            lottos.add(createLotto());
-        }
-        return lottos;
+        return java.util.stream.Stream.generate(this::createLotto)
+                .limit(count)
+                .toList();
     }
 
     private void validatePurchaseAmount(int purchaseAmount) {
