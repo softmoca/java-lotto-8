@@ -36,5 +36,18 @@ public class Lotto {
                 .collect(Collectors.toList());
     }
 
+    public int countMatches(List<Integer> winningNumbers) {
+        int count = 0;
+        for (LottoNumber myNumber : numbers) {
+            for (int winningNumber : winningNumbers) {
+                if (myNumber.getNumber() == winningNumber) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+
 }
 
