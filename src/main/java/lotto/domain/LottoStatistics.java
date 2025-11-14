@@ -29,7 +29,9 @@ public class LottoStatistics {
     }
 
     public double getProfitRate() {
-        return (double) getTotalPrize() / purchaseAmount * 100;
+        double rate = (double) getTotalPrize() / purchaseAmount * 100;
+
+        return Math.round(rate * 10) / 10.0;
     }
 
 }
