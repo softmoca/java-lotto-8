@@ -46,6 +46,11 @@ public class Lotto {
                 .count();
     }
 
+    public boolean containsBonus(int bonusNumber) {
+        LottoNumber bonus = new LottoNumber(bonusNumber);
+        return numbers.contains(bonus);
+    }
+
 
 }
 
