@@ -40,4 +40,18 @@ class LottoStatisticsTest {
         assertThat(statistics.getCount(Rank.FIFTH)).isEqualTo(2);
         assertThat(statistics.getCount(Rank.NONE)).isEqualTo(6);
     }
+
+    @Test
+    void 총_상금을_계산한다() {
+        LottoStatistics statistics = new LottoStatistics(8000);
+
+        statistics.add(Rank.FIFTH);
+        statistics.add(Rank.FOURTH);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+
+        assertThat(statistics.getTotalPrize()).isEqualTo(55_000);
+    }
+
+
 }
