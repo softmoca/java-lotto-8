@@ -12,8 +12,15 @@ public class LottoMachine {
 
     public List<Lotto> issue(int purchaseAmount) {
         validatePurchaseAmount(purchaseAmount);
+        int count = calculateLottoCount(purchaseAmount);
+        return createLottos(count);
+    }
 
-        int count = purchaseAmount / LOTTO_PRICE;
+    private int calculateLottoCount(int purchaseAmount) {
+        return purchaseAmount / LOTTO_PRICE;
+    }
+
+    private List<Lotto> createLottos(int count) {
         List<Lotto> lottos = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             lottos.add(createLotto());
