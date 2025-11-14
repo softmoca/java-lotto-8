@@ -14,7 +14,7 @@ public class LottoStatistics {
     }
 
     public void add(Rank rank) {
-        statistics.merge(rank, 1, Integer::sum);
+        statistics.put(rank, statistics.getOrDefault(rank, 0) + 1);
     }
 
     public int getCount(Rank rank) {

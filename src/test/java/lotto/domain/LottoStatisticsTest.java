@@ -24,4 +24,20 @@ class LottoStatisticsTest {
         assertThat(statistics.getCount(Rank.FIFTH)).isEqualTo(1);
     }
 
+    @Test
+    void 여러_당첨_결과를_추가한다() {
+        LottoStatistics statistics = new LottoStatistics(8000);
+
+        statistics.add(Rank.FIFTH);
+        statistics.add(Rank.FIFTH);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+        statistics.add(Rank.NONE);
+
+        assertThat(statistics.getCount(Rank.FIFTH)).isEqualTo(2);
+        assertThat(statistics.getCount(Rank.NONE)).isEqualTo(6);
+    }
 }
