@@ -1,15 +1,15 @@
 package lotto.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Lotto {
-    private final List<Integer> numbers;
+    private final List<LottoNumber> numbers;
 
     public Lotto(List<Integer> numbers) {
         validate(numbers);
         validateDuplicate(numbers);
-        validateRange(numbers);
-        this.numbers = numbers;
+        this.numbers = convertToLottoNumbers(numbers);
     }
 
     private void validate(List<Integer> numbers) {
@@ -30,14 +30,10 @@ public class Lotto {
         }
     }
 
-    private void validateRange(List<Integer> numbers) {
-        for (int number : numbers) {
-            if (number < 1 || number > 45) {
-                throw new IllegalArgumentException(
-                        "[ERROR] 로또 번호는 1부터 45 사이의 숫자여야 합니다."
-                );
-            }
-        }
+    private List<LottoNumber> convertToLottoNumbers(List<Integer> numbers) {
+        return numbers.stream()
+                .map(LottoNumber::new)
+                .collect(Collectors.toList());
     }
 
 }
