@@ -66,5 +66,24 @@ class RankTest {
         assertThat(fifth.getPrizeMoney()).isEqualTo(5_000);
     }
 
+    @Test
+    void 모든_경우의_수를_테스트한다() {
+        assertThat(Rank.of(6, false).get()).isEqualTo(Rank.FIRST);
+        assertThat(Rank.of(6, true).get()).isEqualTo(Rank.FIRST);
+
+        assertThat(Rank.of(5, true).get()).isEqualTo(Rank.SECOND);
+
+        assertThat(Rank.of(5, false).get()).isEqualTo(Rank.THIRD);
+
+        assertThat(Rank.of(4, false).get()).isEqualTo(Rank.FOURTH);
+        assertThat(Rank.of(4, true).get()).isEqualTo(Rank.FOURTH);
+
+        assertThat(Rank.of(3, false).get()).isEqualTo(Rank.FIFTH);
+
+        assertThat(Rank.of(2, false)).isEmpty();
+        assertThat(Rank.of(1, false)).isEmpty();
+        assertThat(Rank.of(0, false)).isEmpty();
+    }
+
 
 }
