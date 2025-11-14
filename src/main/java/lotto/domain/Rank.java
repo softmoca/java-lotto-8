@@ -39,7 +39,7 @@ public enum Rank {
             return hasBonus;
         }
 
-        return !hasBonus;
+        return true;
     }
 
 }
