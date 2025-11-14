@@ -1,5 +1,6 @@
 package lotto.domain;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,8 @@ public class Lotto {
     private List<LottoNumber> convertToLottoNumbers(List<Integer> numbers) {
         return numbers.stream()
                 .map(LottoNumber::new)
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(LottoNumber::getNumber))
+                .toList();
     }
 
     public int countMatches(List<Integer> winningNumbers) {
@@ -51,6 +53,10 @@ public class Lotto {
         return numbers.contains(bonus);
     }
 
+    public List<Integer> getNumbers() {
+        return numbers.stream()
+                .map(LottoNumber::getNumber).collect(Collectors.toUnmodifiableList());
+    }
 
 }
 
