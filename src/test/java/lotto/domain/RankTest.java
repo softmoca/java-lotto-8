@@ -44,9 +44,21 @@ class RankTest {
     void _2개_이하는_낙첨이다() {
         Optional<Rank> rank = Rank.of(2, false);
         assertThat(rank).isEmpty();
-        
+
         rank = Rank.of(0, false);
         assertThat(rank).isEmpty();
+    }
+
+    @Test
+    void 각_등수는_상금을_갖는다() {
+        Rank first = Rank.of(6, false).get();
+        assertThat(first.getPrizeMoney()).isEqualTo(2_000_000_000);
+
+        Rank second = Rank.of(5, true).get();
+        assertThat(second.getPrizeMoney()).isEqualTo(30_000_000);
+
+        Rank fifth = Rank.of(3, false).get();
+        assertThat(fifth.getPrizeMoney()).isEqualTo(5_000);
     }
 
 
