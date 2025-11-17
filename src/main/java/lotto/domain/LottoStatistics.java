@@ -3,6 +3,7 @@ package lotto.domain;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lotto.dto.RankStatistic;
 
 public class LottoStatistics {
     private final Map<Rank, Integer> statistics;

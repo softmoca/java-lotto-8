@@ -1,4 +1,6 @@
-package lotto.domain;
+package lotto.dto;
+
+import lotto.domain.Rank;
 
 public class RankStatistic {
     private final Rank rank;

@@ -1,10 +1,10 @@
 package lotto.service;
 
 import java.util.List;
-import lotto.domain.LottoResult;
 import lotto.domain.LottoStatistics;
 import lotto.domain.ProfitRate;
-import lotto.domain.RankStatistic;
+import lotto.dto.LottoResult;
+import lotto.dto.RankStatistic;
 
 public class LottoResultService {
 

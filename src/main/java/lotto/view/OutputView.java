@@ -3,8 +3,8 @@ package lotto.view;
 import java.text.DecimalFormat;
 import java.util.List;
 import lotto.domain.Lotto;
-import lotto.domain.LottoResult;
-import lotto.domain.RankStatistic;
+import lotto.dto.LottoResult;
+import lotto.dto.RankStatistic;
 
 public class OutputView {
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("#,###");
