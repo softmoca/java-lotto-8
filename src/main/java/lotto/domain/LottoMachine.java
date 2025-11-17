@@ -6,27 +6,27 @@ import java.util.List;
 public class LottoMachine {
     private static final int LOTTO_PRICE = 1000;
 
-    public LottoMachine() {
+    private LottoMachine() {
     }
 
-    public List<Lotto> issue(Money purchaseAmount) {
+    public static List<Lotto> issue(Money purchaseAmount) {
 
         int count = calculateLottoCount(purchaseAmount.getAmount());
         return createLottos(count);
     }
 
-    private int calculateLottoCount(int purchaseAmount) {
+    private static int calculateLottoCount(int purchaseAmount) {
         return purchaseAmount / LOTTO_PRICE;
     }
 
-    private List<Lotto> createLottos(int count) {
-        return java.util.stream.Stream.generate(this::createLotto)
+    private static List<Lotto> createLottos(int count) {
+        return java.util.stream.Stream.generate(LottoMachine::createLotto)
                 .limit(count)
                 .toList();
     }
 
 
-    private Lotto createLotto() {
+    private static Lotto createLotto() {
         List<Integer> numbers = Randoms.pickUniqueNumbersInRange(1, 45, 6);
         return new Lotto(numbers);
     }
