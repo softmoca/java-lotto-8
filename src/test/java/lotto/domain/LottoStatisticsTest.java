@@ -1,96 +1,57 @@
 package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class LottoStatisticsTest {
 
     @Test
-    void 통계를_생성한다() {
-        int purchaseAmount = 8000;
+    void 등수별_개수를_정확히_집계한다() {
+        // given
+        List<Lotto> lottos = List.of(
+                new Lotto(List.of(1, 2, 3, 4, 5, 6)),   // 1등
+                new Lotto(List.of(1, 2, 3, 4, 5, 7)),   // 2등
+                new Lotto(List.of(1, 2, 3, 4, 5, 8)),   // 3등
+                new Lotto(List.of(1, 2, 3, 4, 10, 11)), // 4등
+                new Lotto(List.of(1, 2, 3, 10, 11, 12)) // 5등
+        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        WinningLotto winningLotto = WinningLotto.of(winningNumbers, new LottoNumber(7));
+        LottoStatistics statistics = LottoStatistics.from(lottos, winningLotto);
 
-        assertThatCode(() -> new LottoStatistics(purchaseAmount))
-                .doesNotThrowAnyException();
-    }
+        // when
+        int firstCount = statistics.getCount(Rank.FIRST);
+        int secondCount = statistics.getCount(Rank.SECOND);
+        int thirdCount = statistics.getCount(Rank.THIRD);
+        int fourthCount = statistics.getCount(Rank.FOURTH);
+        int fifthCount = statistics.getCount(Rank.FIFTH);
 
-    @Test
-    void 당첨_결과를_추가한다() {
-        LottoStatistics statistics = new LottoStatistics(8000);
-
-        statistics.add(Rank.FIFTH);
-
-        assertThat(statistics.getCount(Rank.FIFTH)).isEqualTo(1);
-    }
-
-    @Test
-    void 여러_당첨_결과를_추가한다() {
-        LottoStatistics statistics = new LottoStatistics(8000);
-
-        statistics.add(Rank.FIFTH);
-        statistics.add(Rank.FIFTH);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
-
-        assertThat(statistics.getCount(Rank.FIFTH)).isEqualTo(2);
-        assertThat(statistics.getCount(Rank.NONE)).isEqualTo(6);
+        // then
+        assertThat(firstCount).isEqualTo(1);
+        assertThat(secondCount).isEqualTo(1);
+        assertThat(thirdCount).isEqualTo(1);
+        assertThat(fourthCount).isEqualTo(1);
+        assertThat(fifthCount).isEqualTo(1);
     }
 
     @Test
     void 총_상금을_계산한다() {
-        LottoStatistics statistics = new LottoStatistics(8000);
+        // given
+        List<Lotto> lottos = List.of(
+                new Lotto(List.of(1, 2, 3, 10, 11, 12)),
+                new Lotto(List.of(1, 2, 3, 4, 10, 11))
+        );
+        Lotto winningNumbers = new Lotto(List.of(1, 2, 3, 4, 5, 6));
+        WinningLotto winningLotto = WinningLotto.of(winningNumbers, new LottoNumber(7));
+        LottoStatistics statistics = LottoStatistics.from(lottos, winningLotto);
 
-        statistics.add(Rank.FIFTH);
-        statistics.add(Rank.FOURTH);
-        statistics.add(Rank.NONE);
-        statistics.add(Rank.NONE);
+        // when
+        int totalPrize = statistics.getTotalPrize();
 
-        assertThat(statistics.getTotalPrize()).isEqualTo(55_000);
+        // then
+        assertThat(totalPrize).isEqualTo(55_000);
     }
-
-    @Test
-    void 수익률을_계산한다() {
-        LottoStatistics statistics = new LottoStatistics(8000);
-
-        statistics.add(Rank.FIFTH);
-
-        assertThat(statistics.getProfitRate()).isEqualTo(62.5);
-    }
-
-    @Test
-    void 수익률은_소수점_둘째_자리에서_반올림한다() {
-        LottoStatistics statistics = new LottoStatistics(14000);
-
-        statistics.add(Rank.FIRST);
-
-        //"2,000,000,000 / 14,000 * 100 = 14285714.285714..."
-        assertThat(statistics.getProfitRate()).isEqualTo(14285714.3);
-    }
-
-    @Test
-    void 수익률_계산_예시() {
-        // 예시 1: 100% 수익률
-        LottoStatistics statistics1 = new LottoStatistics(5000);
-        statistics1.add(Rank.FIFTH);
-        assertThat(statistics1.getProfitRate()).isEqualTo(100.0);
-
-        // 예시 2: 50% 수익률
-        LottoStatistics statistics2 = new LottoStatistics(10000);
-        statistics2.add(Rank.FIFTH);
-        assertThat(statistics2.getProfitRate()).isEqualTo(50.0);
-
-        // 예시 3: 0% 수익률 (전부 낙첨)
-        LottoStatistics statistics3 = new LottoStatistics(8000);
-        statistics3.add(Rank.NONE);
-        statistics3.add(Rank.NONE);
-        statistics3.add(Rank.NONE);
-        assertThat(statistics3.getProfitRate()).isEqualTo(0.0);
-    }
-
 
 }
