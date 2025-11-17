@@ -5,40 +5,41 @@ import java.util.List;
 import java.util.Map;
 
 public class LottoStatistics {
+    private final Map<Rank, Integer> statistics;
 
-    public static LottoResult calculate(List<Lotto> lottos,
-                                        WinningLotto winningLotto,
-                                        int purchaseAmount) {
-        // 1. 통계 수집
-        Map<Rank, Integer> statistics = collectStatistics(lottos, winningLotto);
-
-        // 2. DTO 생성
-        List<RankStatistic> rankStats = createRankStatistics(statistics);
-        double profitRate = calculateProfitRate(statistics, purchaseAmount);
-
-        return LottoResult.of(rankStats, profitRate);
+    private LottoStatistics(Map<Rank, Integer> statistics) {
+        this.statistics = statistics;
     }
 
-    private static Map<Rank, Integer> collectStatistics(List<Lotto> lottos,
-                                                        WinningLotto winningLotto) {
-        Map<Rank, Integer> statistics = new HashMap<>();
+
+    public static LottoStatistics from(List<Lotto> lottos, WinningLotto winningLotto) {
+        Map<Rank, Integer> stats = new HashMap<>();
 
         for (Lotto lotto : lottos) {
             Rank rank = winningLotto.match(lotto);
-            statistics.put(rank, statistics.getOrDefault(rank, 0) + 1);
+            stats.merge(rank, 1, Integer::sum);
         }
 
-        return statistics;
+        return new LottoStatistics(stats);
     }
 
-    private static List<RankStatistic> createRankStatistics(Map<Rank, Integer> statistics) {
+    public LottoResult createResult(int purchaseAmount) {
+        List<RankStatistic> rankStats = createRankStatistics();
+        double profitRate = calculateProfitRate(purchaseAmount);
+        return LottoResult.of(rankStats, profitRate);
+    }
+
+    private List<RankStatistic> createRankStatistics() {
         return Rank.getWinningRanksInDisplayOrder().stream()
-                .map(rank -> RankStatistic.of(rank, statistics.getOrDefault(rank, 0)))
+                .map(rank -> RankStatistic.of(rank, getCount(rank)))
                 .toList();
     }
 
-    private static double calculateProfitRate(Map<Rank, Integer> statistics,
-                                              int purchaseAmount) {
+    private int getCount(Rank rank) {
+        return statistics.getOrDefault(rank, 0);
+    }
+
+    private double calculateProfitRate(int purchaseAmount) {
         int totalPrize = statistics.entrySet().stream()
                 .mapToInt(entry -> entry.getKey().getPrizeMoney() * entry.getValue())
                 .sum();
