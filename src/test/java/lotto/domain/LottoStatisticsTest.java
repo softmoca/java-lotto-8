@@ -22,18 +22,14 @@ class LottoStatisticsTest {
         LottoStatistics statistics = LottoStatistics.from(lottos, winningLotto);
 
         // when
-        int firstCount = statistics.getCount(Rank.FIRST);
-        int secondCount = statistics.getCount(Rank.SECOND);
-        int thirdCount = statistics.getCount(Rank.THIRD);
-        int fourthCount = statistics.getCount(Rank.FOURTH);
-        int fifthCount = statistics.getCount(Rank.FIFTH);
+        List<RankStatistic> rankStats = statistics.getRankStatistics();
 
         // then
-        assertThat(firstCount).isEqualTo(1);
-        assertThat(secondCount).isEqualTo(1);
-        assertThat(thirdCount).isEqualTo(1);
-        assertThat(fourthCount).isEqualTo(1);
-        assertThat(fifthCount).isEqualTo(1);
+        assertThat(findStat(rankStats, Rank.FIRST).getCount()).isEqualTo(1);
+        assertThat(findStat(rankStats, Rank.SECOND).getCount()).isEqualTo(1);
+        assertThat(findStat(rankStats, Rank.THIRD).getCount()).isEqualTo(1);
+        assertThat(findStat(rankStats, Rank.FOURTH).getCount()).isEqualTo(1);
+        assertThat(findStat(rankStats, Rank.FIFTH).getCount()).isEqualTo(1);
     }
 
     @Test
@@ -52,6 +48,13 @@ class LottoStatisticsTest {
 
         // then
         assertThat(totalPrize).isEqualTo(55_000);
+    }
+
+    private RankStatistic findStat(List<RankStatistic> stats, Rank rank) {
+        return stats.stream()
+                .filter(stat -> stat.getRank() == rank)
+                .findFirst()
+                .orElseThrow();
     }
 
 }
