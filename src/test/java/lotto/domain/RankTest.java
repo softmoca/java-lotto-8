@@ -1,6 +1,8 @@
 package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,12 +32,15 @@ class RankTest {
 
     @Test
     void 각_등수는_상금을_갖는다() {
-        assertThat(Rank.FIRST.getPrizeMoney()).isEqualTo(2_000_000_000);
-        assertThat(Rank.SECOND.getPrizeMoney()).isEqualTo(30_000_000);
-        assertThat(Rank.THIRD.getPrizeMoney()).isEqualTo(1_500_000);
-        assertThat(Rank.FOURTH.getPrizeMoney()).isEqualTo(50_000);
-        assertThat(Rank.FIFTH.getPrizeMoney()).isEqualTo(5_000);
-        assertThat(Rank.NONE.getPrizeMoney()).isEqualTo(0);
+        assertAll(
+                () -> assertEquals(2_000_000_000, Rank.FIRST.getPrizeMoney()),
+                () -> assertEquals(30_000_000, Rank.SECOND.getPrizeMoney()),
+                () -> assertEquals(1_500_000, Rank.THIRD.getPrizeMoney()),
+                () -> assertEquals(50_000, Rank.FOURTH.getPrizeMoney()),
+                () -> assertEquals(5_000, Rank.FIFTH.getPrizeMoney()),
+                () -> assertEquals(0, Rank.NONE.getPrizeMoney())
+        );
+
     }
 
     @Test

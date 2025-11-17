@@ -1,4 +1,4 @@
-package lotto.service;
+package lotto.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,17 +8,10 @@ import lotto.domain.LottoNumber;
 import lotto.domain.LottoStatistics;
 import lotto.domain.WinningLotto;
 import lotto.dto.LottoResult;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class LottoResultServiceTest {
+class LottoResultMapperTest {
 
-    private LottoResultService service;
-
-    @BeforeEach
-    void setUp() {
-        service = new LottoResultService();
-    }
 
     @Test
     void 통계로부터_결과를_생성한다() {
@@ -31,7 +24,7 @@ class LottoResultServiceTest {
         LottoStatistics statistics = LottoStatistics.from(lottos, winningLotto);
 
         // when
-        LottoResult result = service.createResult(statistics, 1000);
+        LottoResult result = LottoResultMapper.createResult(statistics, 1000);
 
         // then
         assertThat(result).isNotNull();

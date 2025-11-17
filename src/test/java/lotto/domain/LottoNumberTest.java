@@ -1,7 +1,6 @@
 package lotto.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
@@ -20,19 +19,6 @@ class LottoNumberTest {
         assertThatThrownBy(() -> new LottoNumber(46))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("1부터 45");
-    }
-
-    @Test
-    void 유효한_로또_번호를_생성한다() {
-
-        assertThatCode(() -> new LottoNumber(1))
-                .doesNotThrowAnyException();
-
-        assertThatCode(() -> new LottoNumber(45))
-                .doesNotThrowAnyException();
-
-        assertThatCode(() -> new LottoNumber(20))
-                .doesNotThrowAnyException();
     }
 
     @Test

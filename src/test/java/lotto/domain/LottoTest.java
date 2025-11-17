@@ -36,26 +36,33 @@ class LottoTest {
 
     @Test
     void 당첨_번호와_일치하는_개수를_반환한다() {
+        // given
         Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 6));
         List<Integer> winningNumbers = List.of(1, 2, 3, 7, 8, 9);
 
+        // when
         int matchCount = lotto.countMatches(winningNumbers);
 
+        //then
         assertThat(matchCount).isEqualTo(3);
     }
 
     @Test
     void 보너스_번호_포함_여부를_확인한다() {
+        // given
         Lotto lotto = new Lotto(List.of(1, 2, 3, 4, 5, 6));
 
+        // when & then
         assertThat(lotto.containsBonus(7)).isFalse();
         assertThat(lotto.containsBonus(6)).isTrue();
     }
 
     @Test
     void 로또_번호는_오름차순으로_정렬된다() {
+        // given
         Lotto lotto = new Lotto(List.of(6, 3, 1, 5, 2, 4));
 
+        // when & then
         assertThat(lotto.getNumbers())
                 .containsExactly(1, 2, 3, 4, 5, 6);
     }

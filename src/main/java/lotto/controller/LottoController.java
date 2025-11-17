@@ -8,6 +8,7 @@ import lotto.domain.LottoStatistics;
 import lotto.domain.Money;
 import lotto.domain.WinningLotto;
 import lotto.dto.LottoResult;
+import lotto.util.LottoResultMapper;
 import lotto.view.InputHandler;
 import lotto.view.InputView;
 import lotto.view.OutputView;
@@ -28,7 +29,7 @@ public class LottoController {
         WinningLotto winningLotto = readWinningLotto();
 
         LottoStatistics statistics = LottoStatistics.from(lottos, winningLotto);
-        LottoResult result = resultService.createResult(statistics, purchaseAmount.getAmount());
+        LottoResult result = LottoResultMapper.createResult(statistics, purchaseAmount.getAmount());
         outputView.printResult(result);
     }
 
