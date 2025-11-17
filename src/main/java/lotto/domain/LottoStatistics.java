@@ -5,57 +5,45 @@ import java.util.List;
 import java.util.Map;
 
 public class LottoStatistics {
-    private final Map<Rank, Integer> statistics;
 
-    private LottoStatistics() {
-        this.statistics = new HashMap<>();
-    }
+    public static LottoResult calculate(List<Lotto> lottos,
+                                        WinningLotto winningLotto,
+                                        int purchaseAmount) {
+        // 1. 통계 수집
+        Map<Rank, Integer> statistics = collectStatistics(lottos, winningLotto);
 
-    public static LottoStatistics from(List<Lotto> lottos, WinningLotto winningLotto) {
-        LottoStatistics stats = new LottoStatistics();
-
-        for (Lotto lotto : lottos) {
-            Rank rank = winningLotto.match(lotto);
-            stats.add(rank);
-        }
-
-        return stats;
-    }
-
-    private void add(Rank rank) {
-        statistics.put(rank, statistics.getOrDefault(rank, 0) + 1);
-    }
-
-
-    public List<RankStatistic> getRankStatistics() {
-        return Rank.getWinningRanksInDisplayOrder().stream()
-                .map(rank -> RankStatistic.of(rank, getCount(rank)))
-                .toList();
-    }
-
-    public LottoResult createResult(int purchaseAmount) {
-        List<RankStatistic> rankStats = Rank.getWinningRanksInDisplayOrder().stream()
-                .map(rank -> RankStatistic.of(rank, getCount(rank)))
-                .toList();
-
-        double profitRate = calculateProfitRate(purchaseAmount);
+        // 2. DTO 생성
+        List<RankStatistic> rankStats = createRankStatistics(statistics);
+        double profitRate = calculateProfitRate(statistics, purchaseAmount);
 
         return LottoResult.of(rankStats, profitRate);
     }
 
-    private int getCount(Rank rank) {
-        return statistics.getOrDefault(rank, 0);
+    private static Map<Rank, Integer> collectStatistics(List<Lotto> lottos,
+                                                        WinningLotto winningLotto) {
+        Map<Rank, Integer> statistics = new HashMap<>();
+
+        for (Lotto lotto : lottos) {
+            Rank rank = winningLotto.match(lotto);
+            statistics.put(rank, statistics.getOrDefault(rank, 0) + 1);
+        }
+
+        return statistics;
     }
 
-    private int getTotalPrize() {
-        return statistics.entrySet().stream()
+    private static List<RankStatistic> createRankStatistics(Map<Rank, Integer> statistics) {
+        return Rank.getWinningRanksInDisplayOrder().stream()
+                .map(rank -> RankStatistic.of(rank, statistics.getOrDefault(rank, 0)))
+                .toList();
+    }
+
+    private static double calculateProfitRate(Map<Rank, Integer> statistics,
+                                              int purchaseAmount) {
+        int totalPrize = statistics.entrySet().stream()
                 .mapToInt(entry -> entry.getKey().getPrizeMoney() * entry.getValue())
                 .sum();
-    }
 
-    private double calculateProfitRate(int purchaseAmount) {
-        double rate = (double) getTotalPrize() / purchaseAmount * 100;
+        double rate = (double) totalPrize / purchaseAmount * 100;
         return Math.round(rate * 10) / 10.0;
     }
-
 }
